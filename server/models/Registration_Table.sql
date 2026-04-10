@@ -19,3 +19,10 @@ CREATE TABLE employers (
   company_name TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE otp_verification (
+  id SERIAL PRIMARY KEY,
+  email TEXT NOT NULL,
+  otp TEXT NOT NULL,
+  expires_at TIMESTAMP NOT NULL
+);
