@@ -16,7 +16,7 @@ CREATE TABLE candidates (
 CREATE TABLE employers (
   id SERIAL PRIMARY KEY,
   user_id INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-  company_name TEXT NOT NULL,
+  name TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
