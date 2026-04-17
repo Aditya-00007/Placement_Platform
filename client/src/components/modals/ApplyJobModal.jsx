@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function ApplyJobModal({ isOpen, onClose, onSubmit, job }) {
   const [coverLetter, setCoverLetter] = useState("");
 
-  if (!isOpen) return null;
+  // if (!isOpen) return null;
 
   const handleSubmit = () => {
     const payload = {

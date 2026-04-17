@@ -44,9 +44,9 @@ export default function CreateJobModal({ isOpen, onClose, onSubmit }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
       <div className="bg-white rounded-2xl w-[90%] max-w-3xl p-6 overflow-y-auto max-h-[90vh]">
-        <h2 className="text-2xl font-bold mb-4">Create Job</h2>
+        <h2 className="text-2xl font-bold mb-6">Create Job</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <input
             name="title"
             placeholder="Job Title"
