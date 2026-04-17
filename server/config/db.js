@@ -1,7 +1,7 @@
 import pg from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: "./server/.env" });
 
 const pool = new pg.Pool({
   host: process.env.D_Host,
