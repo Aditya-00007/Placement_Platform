@@ -1,42 +1,66 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
+  const navigate = useNavigate(); // ✅ FIXED (top level)
+
   const [form, setForm] = useState({
-  email: "",
-  password: "",
-  confirmPassword: "",
-  role: "candidate",
-  otp: ""
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "candidate",
+    otp: "",
   });
 
+  const [otpTimer, setOtpTimer] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
-  setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ⏱ OTP TIMER
+  const startOtpTimer = () => {
+    setOtpTimer(120); // 2 minutes
+
+    const interval = setInterval(() => {
+      setOtpTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  // 📩 SEND OTP
   const handleSendOTP = async () => {
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/send-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email: form.email })
-    });
+    if (!form.email) return alert("Enter email first");
 
-  const data = await res.json();
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: form.email }),
+      });
 
-    if (res.ok) {
-      alert("OTP sent ✅");
-    } else {
-      alert(data.msg);
-    }
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("OTP sent ✅");
+        startOtpTimer(); // 🔥 start timer
+      } else {
+        alert(data.msg);
+      }
     } catch (err) {
       alert("Error sending OTP");
     }
-    };
+  };
 
+  // 📝 SIGNUP
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -44,126 +68,134 @@ function Signup() {
       return alert("Passwords do not match");
     }
 
-  const navigate = useNavigate();
+    setLoading(true);
 
-  try {
+    try {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: form.email,
           password: form.password,
           role: form.role,
           otp: form.otp,
-          name: "User"
-        })
+          name: "User",
+        }),
       });
 
-  const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-    alert("Signup successful ✅");
+      if (res.ok) {
+        alert("Signup successful ✅");
 
-    // ROLE BASED REDIRECT
-    if (form.role === "employer") {
-      navigate("/employer/dashboard");
-    } else {
-      navigate("/candidate/dashboard");
-    }
-  } else {
-      alert(data.msg);
-    }
+        //  ROLE BASED REDIRECT
+        if (form.role === "employer") {
+          navigate("/employer/dashboard");
+        } else {
+          navigate("/candidate/dashboard");
+        }
+      } else {
+        alert(data.msg);
+      }
     } catch (err) {
       alert("Signup error");
+    } finally {
+      setLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
 
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Create Account
-        </h2>
-
-        {/* Form */}
         <form className="space-y-4" onSubmit={handleSignup}>
-
-          {/* Email */}
           <input
             type="email"
             name="email"
             onChange={handleChange}
             placeholder="Email"
-            className="w-full p-3 border rounded-lg focus:outline-none"
+            className="w-full p-3 border rounded-lg"
           />
 
-          {/* Password */}
           <input
             type="password"
             name="password"
             onChange={handleChange}
             placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:outline-none"
+            className="w-full p-3 border rounded-lg"
           />
 
-          {/* Confirm Password */}
           <input
             type="password"
             name="confirmPassword"
-            placeholder="Confirm Password"
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none"
+            placeholder="Confirm Password"
+            className="w-full p-3 border rounded-lg"
           />
 
-          {/* Role Selection */}
-          <select name="role" onChange={handleChange}className="text-gray-700 w-full p-3 border rounded-lg focus:outline-none">
+          <select
+            name="role"
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          >
             <option value="candidate">Candidate</option>
             <option value="employer">Employer</option>
           </select>
 
-          {/* OTP Row */}
+          {/* OTP SECTION */}
           <div className="flex gap-3">
-
-            {/* Send OTP Button */}
             <button
               type="button"
               onClick={handleSendOTP}
-              className="w-1/3 bg-gray-500 text-white p-3 rounded-lg hover:bg-yellow-600"
+              disabled={otpTimer > 0}
+              className={`w-1/3 text-white p-3 rounded-lg
+                ${otpTimer > 0 ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"}`}
             >
-              Send OTP
+              {otpTimer > 0
+                ? `${Math.floor(otpTimer / 60)}:${String(otpTimer % 60).padStart(2, "0")}`
+                : "Send OTP"}
             </button>
 
-            {/* OTP Field */}
             <input
               type="text"
-              name="otp" onChange={handleChange}
+              name="otp"
+              onChange={handleChange}
               placeholder="Enter OTP"
-              className="w-full p-3 border rounded-lg focus:outline-none"
+              className="w-full p-3 border rounded-lg"
             />
           </div>
 
-          {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
+            disabled={
+              loading ||
+              !form.otp ||
+              form.otp.length < 6 ||
+              form.password !== form.confirmPassword
+            }
+            className={`w-full p-3 rounded-lg text-white
+    ${
+      loading ||
+      !form.otp ||
+      form.otp.length < 6 ||
+      form.password !== form.confirmPassword
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-green-500 hover:bg-green-600"
+    }`}
           >
-            Sign Up
+            {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
-        {/* Footer */}
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
           <Link to="/signin" className="text-blue-500">
             Login
           </Link>
         </p>
-
       </div>
     </div>
   );

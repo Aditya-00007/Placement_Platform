@@ -6,7 +6,7 @@ import pool from "../config/db.js";
 const router = express.Router();
 
 router.get("/dashboard", userAuth, isEmployer, async (req, res) => {
-  const empResult = await client.query(
+  const empResult = await pool.query(
     "SELECT id FROM employers WHERE user_id = $1",
     [req.user.id],
   );
@@ -14,7 +14,7 @@ router.get("/dashboard", userAuth, isEmployer, async (req, res) => {
   if (empResult.rows.length === 0) {
     return res.status(404).json({ error: "Employer not found" });
   }
-
+  const employer_id = empResult.rows[0].id;
   // Stats
   const statsQuery = await pool.query(
     `
@@ -69,7 +69,8 @@ router.get("/dashboard", userAuth, isEmployer, async (req, res) => {
 router.get("/profile", userAuth, isEmployer, async (req, res) => {
   try {
     //  Get employer_id
-    const empResult = await client.query(
+    console.log("USER:", req.user);
+    const empResult = await pool.query(
       "SELECT id FROM employers WHERE user_id = $1",
       [req.user.id],
     );
@@ -81,7 +82,7 @@ router.get("/profile", userAuth, isEmployer, async (req, res) => {
     const employer_id = empResult.rows[0].id;
 
     //  Fetch all data
-    const emp_profile = await client.query(
+    const emp_profile = await pool.query(
       "SELECT * FROM employer_profile WHERE employer_id=$1",
       [employer_id],
     );
@@ -98,7 +99,7 @@ router.get("/profile", userAuth, isEmployer, async (req, res) => {
 
 router.post("/profile", userAuth, isEmployer, async (req, res) => {
   try {
-    const empResult = await client.query(
+    const empResult = await pool.query(
       "SELECT id FROM employers WHERE user_id = $1",
       [req.user.id],
     );
@@ -205,7 +206,7 @@ router.post("/profile", userAuth, isEmployer, async (req, res) => {
       hr_name,
     ];
 
-    const result = await client.query(query, values);
+    const result = await pool.query(query, values);
 
     res.status(200).json({
       message: "Profile saved successfully",
@@ -313,7 +314,7 @@ router.post("/jobs", userAuth, isEmployer, async (req, res) => {
 
 router.get("/jobs", userAuth, isEmployer, async (req, res) => {
   const { filter, sort } = req.query;
-  const empResult = await client.query(
+  const empResult = await pool.query(
     "SELECT id FROM employers WHERE user_id = $1",
     [req.user.id],
   );
@@ -321,7 +322,7 @@ router.get("/jobs", userAuth, isEmployer, async (req, res) => {
   if (empResult.rows.length === 0) {
     return res.status(404).json({ error: "Employer not found" });
   }
-  const employer_id = empResult.rows[0].employer_id;
+  const employer_id = empResult.rows[0].id;
   let query = `
     SELECT j.*, 
       (SELECT COUNT(*) FROM applications a WHERE a.job_id=j.id) AS application_count
@@ -333,7 +334,8 @@ router.get("/jobs", userAuth, isEmployer, async (req, res) => {
 
   // FILTER
   if (filter && filter !== "ALL") {
-    query += ` AND status = '${filter}'`;
+    values.push(filter);
+    query += ` AND status = $${values.length}`;
   }
 
   // SORT
@@ -344,11 +346,11 @@ router.get("/jobs", userAuth, isEmployer, async (req, res) => {
   }
 
   const result = await pool.query(query, values);
-  res.json(result.rows);
+  res.json({ jobs: result.rows });
 });
 
 router.get("/jobs-list", userAuth, isEmployer, async (req, res) => {
-  const empResult = await client.query(
+  const empResult = await pool.query(
     "SELECT id FROM employers WHERE user_id = $1",
     [req.user.id],
   );
@@ -356,7 +358,7 @@ router.get("/jobs-list", userAuth, isEmployer, async (req, res) => {
   if (empResult.rows.length === 0) {
     return res.status(404).json({ error: "Employer not found" });
   }
-  const employer_id = empResult.rows[0].employer_id;
+  const employer_id = empResult.rows[0].id;
   const result = await pool.query(
     "SELECT id, title FROM jobs WHERE employer_id=$1",
     [employer_id],
@@ -373,7 +375,7 @@ router.delete("/jobs/:id", userAuth, isEmployer, async (req, res) => {
   if (empResult.rows.length === 0) {
     return res.status(404).json({ error: "Employer not found" });
   }
-  const employer_id = empResult.rows[0].employer_id;
+  const employer_id = empResult.rows[0].id;
   await pool.query("DELETE FROM jobs WHERE id=$1 AND employer_id=$2", [
     req.params.id,
     employer_id,
@@ -384,7 +386,7 @@ router.delete("/jobs/:id", userAuth, isEmployer, async (req, res) => {
 
 router.get("/applications", userAuth, isEmployer, async (req, res) => {
   const { job, status, sort } = req.query;
-  const empResult = await client.query(
+  const empResult = await pool.query(
     "SELECT id FROM employers WHERE user_id = $1",
     [req.user.id],
   );
@@ -392,7 +394,7 @@ router.get("/applications", userAuth, isEmployer, async (req, res) => {
   if (empResult.rows.length === 0) {
     return res.status(404).json({ error: "Employer not found" });
   }
-  const employer_id = empResult.rows[0].employer_id;
+  const employer_id = empResult.rows[0].id;
 
   let query = `
     SELECT 

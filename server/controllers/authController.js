@@ -107,7 +107,7 @@ const register = async (req, res) => {
       );
     } else if (role === "employer") {
       await client.query(
-        "INSERT INTO employers (user_id, company_name) VALUES ($1, $2)",
+        "INSERT INTO employers (user_id, name) VALUES ($1, $2)",
         [user.id, name],
       );
     } else {
@@ -121,9 +121,14 @@ const register = async (req, res) => {
     ]);
 
     await client.query("COMMIT"); // success
-
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
     res.json({
       msg: "Registered successfully",
+      token,
       user: {
         id: user.id,
         email: user.email,
