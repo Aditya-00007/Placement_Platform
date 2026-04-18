@@ -15,8 +15,55 @@ router.get("/dashboard", userAuth, isEmployer, async (req, res) => {
     return res.status(404).json({ error: "Employer not found" });
   }
 
-  const employer = empResult.rows[0].name;
-  res.json({ msg: "Welcome Employee", employer: employer });
+  // Stats
+  const statsQuery = await pool.query(
+    `
+    SELECT 
+      (SELECT COUNT(*) FROM jobs WHERE employer_id=$1) AS total_jobs,
+      (SELECT COUNT(*) FROM applications a 
+        JOIN jobs j ON a.job_id=j.id 
+        WHERE j.employer_id=$1) AS total_applications,
+      (SELECT COUNT(*) FROM applications a 
+        JOIN jobs j ON a.job_id=j.id 
+        WHERE j.employer_id=$1 AND a.status='SHORTLISTED') AS shortlisted,
+      (SELECT COUNT(*) FROM applications a 
+        JOIN jobs j ON a.job_id=j.id 
+        WHERE j.employer_id=$1 AND a.status='HIRED') AS hired
+  `,
+    [employer_id],
+  );
+
+  // Jobs
+  const jobsQuery = await pool.query(
+    `SELECT id, title, location, status 
+     FROM jobs WHERE employer_id=$1 
+     ORDER BY created_at DESC LIMIT 5`,
+    [employer_id],
+  );
+
+  // Applications
+  const appsQuery = await pool.query(
+    `
+    SELECT a.id, a.status, c.name AS candidate_name, j.title AS job_title
+    FROM applications a
+    JOIN jobs j ON a.job_id=j.id
+    JOIN candidates c ON a.candidate_id=c.id
+    WHERE j.employer_id=$1
+    ORDER BY a.applied_at DESC LIMIT 5
+  `,
+    [employer_id],
+  );
+
+  res.json({
+    stats: {
+      totalJobs: statsQuery.rows[0].total_jobs,
+      totalApplications: statsQuery.rows[0].total_applications,
+      shortlisted: statsQuery.rows[0].shortlisted,
+      hired: statsQuery.rows[0].hired,
+    },
+    jobs: jobsQuery.rows,
+    applications: appsQuery.rows,
+  });
 });
 
 router.get("/profile", userAuth, isEmployer, async (req, res) => {
@@ -262,6 +309,126 @@ router.post("/jobs", userAuth, isEmployer, async (req, res) => {
   } finally {
     client.release();
   }
+});
+
+router.get("/jobs", userAuth, isEmployer, async (req, res) => {
+  const { filter, sort } = req.query;
+  const empResult = await client.query(
+    "SELECT id FROM employers WHERE user_id = $1",
+    [req.user.id],
+  );
+
+  if (empResult.rows.length === 0) {
+    return res.status(404).json({ error: "Employer not found" });
+  }
+  const employer_id = empResult.rows[0].employer_id;
+  let query = `
+    SELECT j.*, 
+      (SELECT COUNT(*) FROM applications a WHERE a.job_id=j.id) AS application_count
+    FROM jobs j
+    WHERE employer_id = $1
+  `;
+
+  const values = [employer_id];
+
+  // FILTER
+  if (filter && filter !== "ALL") {
+    query += ` AND status = '${filter}'`;
+  }
+
+  // SORT
+  if (sort === "oldest") {
+    query += ` ORDER BY created_at ASC`;
+  } else {
+    query += ` ORDER BY created_at DESC`;
+  }
+
+  const result = await pool.query(query, values);
+  res.json(result.rows);
+});
+
+router.get("/jobs-list", userAuth, isEmployer, async (req, res) => {
+  const empResult = await client.query(
+    "SELECT id FROM employers WHERE user_id = $1",
+    [req.user.id],
+  );
+
+  if (empResult.rows.length === 0) {
+    return res.status(404).json({ error: "Employer not found" });
+  }
+  const employer_id = empResult.rows[0].employer_id;
+  const result = await pool.query(
+    "SELECT id, title FROM jobs WHERE employer_id=$1",
+    [employer_id],
+  );
+  res.json(result.rows);
+});
+
+router.delete("/jobs/:id", userAuth, isEmployer, async (req, res) => {
+  const empResult = await client.query(
+    "SELECT id FROM employers WHERE user_id = $1",
+    [req.user.id],
+  );
+
+  if (empResult.rows.length === 0) {
+    return res.status(404).json({ error: "Employer not found" });
+  }
+  const employer_id = empResult.rows[0].employer_id;
+  await pool.query("DELETE FROM jobs WHERE id=$1 AND employer_id=$2", [
+    req.params.id,
+    employer_id,
+  ]);
+
+  res.json({ message: "Job deleted" });
+});
+
+router.get("/applications", userAuth, isEmployer, async (req, res) => {
+  const { job, status, sort } = req.query;
+  const empResult = await client.query(
+    "SELECT id FROM employers WHERE user_id = $1",
+    [req.user.id],
+  );
+
+  if (empResult.rows.length === 0) {
+    return res.status(404).json({ error: "Employer not found" });
+  }
+  const employer_id = empResult.rows[0].employer_id;
+
+  let query = `
+    SELECT 
+      a.id,
+      a.status,
+      a.match_score,
+      a.applied_at,
+      c.name AS candidate_name,
+      j.title AS job_title
+    FROM applications a
+    JOIN jobs j ON a.job_id = j.id
+    JOIN candidates c ON a.candidate_id = c.id
+    WHERE j.employer_id = $1
+  `;
+
+  const values = [employer_id];
+
+  // FILTER: Job
+  if (job && job !== "ALL") {
+    query += ` AND j.id = ${job}`;
+  }
+
+  // FILTER: Status
+  if (status && status !== "ALL") {
+    query += ` AND a.status = '${status}'`;
+  }
+
+  // SORT
+  if (sort === "oldest") {
+    query += ` ORDER BY a.applied_at ASC`;
+  } else {
+    query += ` ORDER BY a.applied_at DESC`;
+  }
+
+  const result = await pool.query(query, values);
+  res.json(result.rows);
 });
 
 router.patch(
