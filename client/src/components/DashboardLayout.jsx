@@ -13,11 +13,11 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* BODY */}
-      <div className="flex pt-[60px] h-full">
+      <div className="flex pt-15 h-full">
         {/* SIDEBAR */}
         <div
-          className={`fixed top-[60px] left-0 h-full bg-[#212529] transition-all duration-300
-          ${collapsed ? "w-[70px]" : "w-[260px]"}`}
+          className={`fixed top-15 left-0 h-full bg-[#212529] transition-all duration-300
+          ${collapsed ? "w-17.5" : "w-65"}`}
         >
           <Sidebar collapsed={collapsed} />
         </div>
@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }) {
         {/* MAIN CONTENT */}
         <main
           className={`flex-1 bg-gray-100 p-6 overflow-y-auto transition-all duration-300
-          ${collapsed ? "ml-[70px]" : "ml-[260px]"}`}
+          ${collapsed ? "ml-17.5" : "ml-65"}`}
         >
           {children}
         </main>

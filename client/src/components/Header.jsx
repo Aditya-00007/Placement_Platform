@@ -1,6 +1,6 @@
 export default function Header({ toggleSidebar }) {
   return (
-    <nav className="h-[60px] bg-white shadow-sm px-6 flex justify-between items-center">
+    <nav className="h-15 bg-white shadow-sm px-6 flex justify-between items-center">
       <div className="flex items-center gap-3">
         <button
           onClick={toggleSidebar}
