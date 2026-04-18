@@ -1,81 +1,172 @@
 import { useState } from "react";
-import CreateJobModal from "../components/modals/CreateJobModal";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Dashboard() {
-  const [open, setOpen] = useState(false);
-
-  const handleSubmit = async (data) => {
-    console.log(data);
-
-    // Call API
-    // await axios.post("/jobs", data);
-  };
-}
-export default function Signup() {
+function Signup() {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  role: "candidate",
+  otp: ""
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSendOTP = async () => {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email: form.email })
+    });
+
+  const data = await res.json();
+
+    if (res.ok) {
+      alert("OTP sent ✅");
+    } else {
+      alert(data.msg);
+    }
+    } catch (err) {
+      alert("Error sending OTP");
+    }
+    };
+
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log(form);
+
+    if (form.password !== form.confirmPassword) {
+      return alert("Passwords do not match");
+    }
+
+  const navigate = useNavigate();
+
+  try {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          role: form.role,
+          otp: form.otp,
+          name: "User"
+        })
+      });
+
+  const data = await res.json();
+
+    if (res.ok) {
+    alert("Signup successful ✅");
+
+    // ROLE BASED REDIRECT
+    if (form.role === "employer") {
+      navigate("/employer/dashboard");
+    } else {
+      navigate("/candidate/dashboard");
+    }
+  } else {
+      alert(data.msg);
+    }
+    } catch (err) {
+      alert("Signup error");
+    }
   };
+
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
-        <button onClick={() => setOpen(true)}>Create Job</button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
 
-        <CreateJobModal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          onSubmit={handleSubmit}
-        />
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Create Account
+        </h2>
 
-        <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
+        {/* Form */}
+        <form className="space-y-4" onSubmit={handleSignup}>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
+          {/* Email */}
           <input
             type="email"
             name="email"
-            placeholder="Email"
-            value={form.email}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Email"
+            className="w-full p-3 border rounded-lg focus:outline-none"
           />
 
+          {/* Password */}
           <input
             type="password"
             name="password"
-            placeholder="Password"
-            value={form.password}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Password"
+            className="w-full p-3 border rounded-lg focus:outline-none"
           />
 
+          {/* Confirm Password */}
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg focus:outline-none"
+          />
+
+          {/* Role Selection */}
+          <select name="role" onChange={handleChange}className="text-gray-700 w-full p-3 border rounded-lg focus:outline-none">
+            <option value="candidate">Candidate</option>
+            <option value="employer">Employer</option>
+          </select>
+
+          {/* OTP Row */}
+          <div className="flex gap-3">
+
+            {/* Send OTP Button */}
+            <button
+              type="button"
+              onClick={handleSendOTP}
+              className="w-1/3 bg-gray-500 text-white p-3 rounded-lg hover:bg-yellow-600"
+            >
+              Send OTP
+            </button>
+
+            {/* OTP Field */}
+            <input
+              type="text"
+              name="otp" onChange={handleChange}
+              placeholder="Enter OTP"
+              className="w-full p-3 border rounded-lg focus:outline-none"
+            />
+          </div>
+
+          {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
           >
             Sign Up
           </button>
         </form>
+
+        {/* Footer */}
+        <p className="text-sm text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/signin" className="text-blue-500">
+            Login
+          </Link>
+        </p>
+
       </div>
     </div>
   );
 }
+
+export default Signup;
