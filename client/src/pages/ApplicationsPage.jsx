@@ -19,7 +19,12 @@ export default function ApplicationsPage() {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("/api/employer/jobs-list");
+      const token = localStorage.getItem("token");
+      const res = await axios.get("/api/employer/jobs-list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setJobs(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
@@ -29,8 +34,12 @@ export default function ApplicationsPage() {
   };
 
   const fetchApplications = async () => {
+    const token = localStorage.getItem("token");
     const res = await axios.get("/api/employer/applications", {
       params: filters,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setApplications(Array.isArray(res.data) ? res.data : []);
   };
