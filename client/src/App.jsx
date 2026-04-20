@@ -8,16 +8,39 @@ import EmployerDashboard from "./pages/EmployerDashboard";
 import ApplicationsPage from "./pages/ApplicationsPage";
 import EmployerProfile from "./pages/EmployerProfile";
 import JobsPage from "./pages/JobsPage";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
+import Unauthorized from "./pages/Unauthorized";
+import AdminJobs from "./pages/AdminJobs";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/" element={<Signup />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/signin" element={<Signin />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/jobs"
+        element={
+          <AdminRoute>
+            <AdminJobs />
+          </AdminRoute>
+        }
+      />
       <Route
         path="/candidate/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["candidate"]}>
             <CandidateDashboard />
           </ProtectedRoute>
         }
@@ -25,7 +48,7 @@ export default function App() {
       <Route
         path="/employer/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["employer"]}>
             <EmployerDashboard />
           </ProtectedRoute>
         }
@@ -33,7 +56,7 @@ export default function App() {
       <Route
         path="/employer/profile"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["employer"]}>
             <EmployerProfile />
           </ProtectedRoute>
         }
@@ -41,7 +64,7 @@ export default function App() {
       <Route
         path="/employer/jobs"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["employer"]}>
             <JobsPage />
           </ProtectedRoute>
         }
@@ -49,20 +72,9 @@ export default function App() {
       <Route
         path="/employer/applications"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["employer"]}>
             <ApplicationsPage />
           </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ApplyJobModal
-            isOpen={true}
-            onClose={() => console.log("Closed")}
-            onSubmit={(payload) => console.log(payload)}
-            job={{ id: 1, title: "Test Job", location: "Anywhere" }}
-          />
         }
       />
     </Routes>

@@ -14,9 +14,9 @@ export default function EmployerJobViewModal({ isOpen, onClose, jobId }) {
 
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`/api/employer/jobs/${jobId}`, {
+        const res = await axios.get(`/api/admin/jobs/${jobId}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
           },
         });
 
@@ -36,7 +36,7 @@ export default function EmployerJobViewModal({ isOpen, onClose, jobId }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <div className="bg-white w-[90%] max-w-2xl p-6 rounded-xl relative overflow-y-auto max-h-[90vh]">
-        {/* ❌ Close */}
+        {/*  Close */}
         <button onClick={onClose} className="absolute top-4 right-4 text-xl">
           ✕
         </button>

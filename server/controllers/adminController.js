@@ -26,8 +26,16 @@ export const loginAdmin = async (req, res) => {
       process.env.JWT_SECRET,
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        id: admin.rows[0].id,
+        email: admin.rows[0].email,
+        role: "admin",
+      },
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("LOGIN ERROR:", err);
+    res.status(500).json({ msg: err.message });
   }
 };
