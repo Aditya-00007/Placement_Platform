@@ -107,42 +107,51 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-indigo-100 px-4">
+      <div className="backdrop-blur-lg bg-white/80 border border-gray-200 p-8 rounded-2xl shadow-xl w-full max-w-md transition-all duration-300">
+        <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">
+          Create Account
+        </h2>
+        <p className="text-center text-gray-500 mb-6 text-sm">
+          Start your journey with us 🚀
+        </p>
 
         <form className="space-y-4" onSubmit={handleSignup}>
+          {/* EMAIL */}
           <input
             type="email"
             name="email"
             onChange={handleChange}
             placeholder="Email"
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
 
+          {/* PASSWORD */}
           <input
             type="password"
             name="password"
             onChange={handleChange}
             placeholder="Password"
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
 
+          {/* CONFIRM PASSWORD */}
           <input
             type="password"
             name="confirmPassword"
             onChange={handleChange}
             placeholder="Confirm Password"
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
 
+          {/* ROLE */}
           <select
             name="role"
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           >
-            <option value="candidate">Candidate</option>
-            <option value="employer">Employer</option>
+            <option value="candidate">🎓 Candidate</option>
+            <option value="employer">🏢 Employer</option>
           </select>
 
           {/* OTP SECTION */}
@@ -151,11 +160,17 @@ function Signup() {
               type="button"
               onClick={handleSendOTP}
               disabled={otpTimer > 0}
-              className={`w-1/3 text-white p-3 rounded-lg
-                ${otpTimer > 0 ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"}`}
+              className={`w-1/3 text-white p-3 rounded-lg font-medium transition-all duration-200
+            ${
+              otpTimer > 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600 shadow-md hover:shadow-lg"
+            }`}
             >
               {otpTimer > 0
-                ? `${Math.floor(otpTimer / 60)}:${String(otpTimer % 60).padStart(2, "0")}`
+                ? `${Math.floor(otpTimer / 60)}:${String(
+                    otpTimer % 60,
+                  ).padStart(2, "0")}`
                 : "Send OTP"}
             </button>
 
@@ -164,10 +179,11 @@ function Signup() {
               name="otp"
               onChange={handleChange}
               placeholder="Enter OTP"
-              className="w-full p-3 border rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
           </div>
 
+          {/* SUBMIT */}
           <button
             type="submit"
             disabled={
@@ -176,23 +192,26 @@ function Signup() {
               form.otp.length < 6 ||
               form.password !== form.confirmPassword
             }
-            className={`w-full p-3 rounded-lg text-white
-    ${
-      loading ||
-      !form.otp ||
-      form.otp.length < 6 ||
-      form.password !== form.confirmPassword
-        ? "bg-gray-400 cursor-not-allowed"
-        : "bg-green-500 hover:bg-green-600"
-    }`}
+            className={`w-full p-3 rounded-lg text-white font-semibold transition-all duration-200
+        ${
+          loading ||
+          !form.otp ||
+          form.otp.length < 6 ||
+          form.password !== form.confirmPassword
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-gradient-to-r from-green-500 to-emerald-600 hover:opacity-90 shadow-md hover:shadow-lg"
+        }`}
           >
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-6 text-gray-600">
           Already have an account?{" "}
-          <Link to="/signin" className="text-blue-500">
+          <Link
+            to="/signin"
+            className="text-blue-500 font-medium hover:underline"
+          >
             Login
           </Link>
         </p>

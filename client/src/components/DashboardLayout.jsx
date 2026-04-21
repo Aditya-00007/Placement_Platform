@@ -1,15 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
 export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [user, setUser] = useState("");
 
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    setUser(role);
+  }, []);
   return (
     <div className="h-screen overflow-hidden">
       {/* HEADER */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        <Header toggleSidebar={() => setCollapsed(!collapsed)} />
+        <Header
+          toggleSidebar={toggleSidebar}
+          user={{ name: "User", role: user }}
+        />
       </div>
 
       {/* BODY */}

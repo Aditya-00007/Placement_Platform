@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import Unauthorized from "./pages/Unauthorized";
 import AdminJobs from "./pages/AdminJobs";
+import AdminCandidatesPage from "./pages/AdminCandidatesPage";
+import AdminEmployersPage from "./pages/AdminEmployersPage";
 
 export default function App() {
   return (
@@ -20,6 +22,7 @@ export default function App() {
       <Route path="/" element={<Signup />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/signin" element={<Signin />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route
         path="/admin/dashboard"
@@ -34,6 +37,22 @@ export default function App() {
         element={
           <AdminRoute>
             <AdminJobs />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/candidates"
+        element={
+          <AdminRoute>
+            <AdminCandidatesPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/employers"
+        element={
+          <AdminRoute>
+            <AdminEmployersPage />
           </AdminRoute>
         }
       />

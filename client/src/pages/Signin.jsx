@@ -49,38 +49,52 @@ const Signin = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-indigo-100 px-4">
+      <div className="backdrop-blur-lg bg-white/80 border border-gray-200 p-8 rounded-2xl shadow-xl w-full max-w-sm transition-all duration-300">
+        {/* TITLE */}
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+          Welcome Back 👋
+        </h2>
+        <p className="text-center text-gray-500 text-sm mb-6">
+          Login to continue your journey
+        </p>
 
+        {/* FORM */}
         <form onSubmit={handleLogin} className="space-y-4">
+          {/* EMAIL */}
           <input
             type="email"
             name="email"
             onChange={handleChange}
             placeholder="Email"
-            className="w-full p-3 border rounded-lg focus:outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
 
+          {/* PASSWORD */}
           <input
             type="password"
             name="password"
             onChange={handleChange}
             placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
 
+          {/* BUTTON */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
+            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 rounded-lg font-semibold shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200"
           >
             Sign In
           </button>
         </form>
 
-        <p className="text-sm text-center mt-4">
+        {/* FOOTER */}
+        <p className="text-sm text-center mt-6 text-gray-600">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-500 cursor-pointer">
+          <Link
+            to="/signup"
+            className="text-blue-500 font-medium hover:underline"
+          >
             Sign Up
           </Link>
         </p>

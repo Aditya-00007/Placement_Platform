@@ -5,11 +5,17 @@ import Header from "../components/Header";
 export default function AdminDashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
 
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
   return (
     <div className="h-screen overflow-hidden">
       {/* HEADER */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        <Header toggleSidebar={() => setCollapsed(!collapsed)} />
+        <Header
+          toggleSidebar={toggleSidebar}
+          user={{ name: "Aditya", role: "Admin" }}
+        />
       </div>
 
       {/* BODY */}
