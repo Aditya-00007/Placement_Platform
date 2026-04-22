@@ -99,3 +99,33 @@ export default function App() {
     </Routes>
   );
 }
+/*import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import AboutPage from "./pages/AboutPage";
+import ServicesPage from "./pages/ServicePage";
+import CertificationPage from "./pages/CertificationPage";
+import RegistrationPage from "./pages/RegistrationPage";
+import CurrentJobsPage from "./pages/CurrentJobsPage";
+import JobDetailsPage from "./pages/JobDetailsPage";
+import ContactPage from "./pages/ContactPage";
+import Signup from "./pages/Signup";
+
+export default function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<AboutPage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/certification" element={<CertificationPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/current-jobs" element={<CurrentJobsPage />} />
+        <Route path="/current-jobs/:jobId" element={<JobDetailsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </>
+  );
+}
+
+*/
