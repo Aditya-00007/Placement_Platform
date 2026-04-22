@@ -14,10 +14,41 @@ export default function JobsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
+  const [isApproved, setIsApproved] = useState(false);
 
   useEffect(() => {
     fetchJobs();
   }, [filter, sort]);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get("/api/employer/status", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setIsApproved(res.data.isApproved);
+      } catch (err) {
+        console.error("Status error:", err.response?.data || err.message);
+      }
+    };
+
+    fetchStatus();
+  }, []);
+
+  const handleOpenModal = () => {
+    if (!isApproved) {
+      toast.error("Your account is not approved yet");
+      return;
+    }
+
+    setShowModal(true);
+  };
+
   const handleCreateJob = async (data) => {
     try {
       const token = localStorage.getItem("token");
@@ -112,10 +143,17 @@ export default function JobsPage() {
         <h1 className="text-2xl font-bold mb-6">My Jobs</h1>
         <div className="flex justify-between mb-3">
           <button
-            className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white px-6 py-0 rounded"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal}
+            disabled={!isApproved}
+            className={`px-4 py-2 rounded-md text-l font-medium transition-all duration-200
+    ${
+      isApproved
+        ? "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer shadow-sm "
+        : "bg-gray-200 text-gray-500 cursor-not-allowed"
+    }
+  `}
           >
-            + Add Job
+            Post Job
           </button>
           {/* FILTERS */}
           <div className="flex gap-4 mb-4">

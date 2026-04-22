@@ -97,6 +97,33 @@ router.get("/profile", userAuth, isEmployer, async (req, res) => {
   }
 });
 
+router.get("/status", userAuth, isEmployer, async (req, res) => {
+  try {
+    const empResult = await pool.query(
+      "SELECT id FROM employers WHERE user_id = $1",
+      [req.user.id],
+    );
+
+    if (empResult.rows.length === 0) {
+      return res.status(404).json({ error: "Employer not found" });
+    }
+
+    const employer_id = empResult.rows[0].id;
+
+    const emp_profile = await pool.query(
+      "SELECT is_approved FROM employer_profile WHERE employer_id=$1",
+      [employer_id],
+    );
+
+    res.status(200).json({
+      isApproved: emp_profile.rows[0]?.is_approved ?? false,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.post("/profile", userAuth, isEmployer, async (req, res) => {
   try {
     const empResult = await pool.query(

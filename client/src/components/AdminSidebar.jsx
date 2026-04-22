@@ -4,10 +4,10 @@ export default function AdminSidebar({ collapsed }) {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Dashboard", path: "/admin/dashboard", icon: "🏠" },
-    { name: "Jobs", path: "/admin/jobs", icon: "💼" },
-    { name: "Candidates", path: "/admin/candidates", icon: "🧑🏻‍🎓" },
-    { name: "Employers", path: "/admin/employers", icon: "🧑🏻‍💼" },
+    { name: "Dashboard", path: "/admin/dashboard", icon: "📊" },
+    { name: "Jobs", path: "/admin/jobs", icon: "📄" },
+    { name: "Candidates", path: "/admin/candidates", icon: "🎓" },
+    { name: "Employers", path: "/admin/employers", icon: "💼" },
   ];
 
   return (

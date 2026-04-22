@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Header({ toggleSidebar, user }) {
+export default function Header({ toggleSidebar, user, status }) {
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
@@ -11,11 +11,33 @@ export default function Header({ toggleSidebar, user }) {
     else setGreeting("Good Evening 🌙 ");
   }, []);
 
+  // 🎯 Status Badge UI
+  const renderStatusBadge = () => {
+    if (user?.role !== "employer") return null;
+
+    const styles = {
+      approved: "bg-green-100 text-green-700",
+      pending: "bg-yellow-100 text-yellow-700",
+      suspended: "bg-red-100 text-red-700",
+    };
+
+    const labels = {
+      approved: "✔ Verified",
+      pending: "⏳ Pending",
+      suspended: "⚠ Suspended",
+    };
+
+    return (
+      <span className={`text-xs px-3 py-1 rounded-full ${styles[status]}`}>
+        {labels[status]}
+      </span>
+    );
+  };
+
   return (
     <nav className="h-16 bg-white shadow-md px-6 flex justify-between items-center border-b">
-      {/* LEFT SECTION */}
+      {/* LEFT */}
       <div className="flex items-center gap-4">
-        {/* TOGGLE */}
         <button
           onClick={toggleSidebar}
           className="px-3 py-2 border rounded-md hover:bg-gray-100 transition"
@@ -25,27 +47,32 @@ export default function Header({ toggleSidebar, user }) {
 
         <div className="flex items-center gap-3">
           <img
-            src="../.../..\public\Images\download.webp" //
+            src="/Images/download.webp"
             alt="Company Logo"
             className="w-15 h-15 object-contain"
           />
 
           <div className="flex flex-col leading-tight">
             <span className="text-xl font-bold text-gray-800">
-              Placment Cell
+              Placement Cell
             </span>
-            <span className="text-xs text-gray-500">
-              {user?.role === "admin" && "Admin Dashboard"}
-              {user?.role === "employer" && "Employer Panel"}
-              {user?.role === "candidate" && "Candidate Dashboard"}
-            </span>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">
+                {user?.role === "admin" && "Admin Dashboard"}
+                {user?.role === "employer" && "Employer Panel"}
+                {user?.role === "candidate" && "Candidate Dashboard"}
+              </span>
+
+              {/* ✅ Status Badge here */}
+              {renderStatusBadge()}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* RIGHT SECTION */}
+      {/* RIGHT */}
       <div className="flex items-center gap-4">
-        {/* Greeting */}
         <div className="text-right hidden sm:block">
           <p className="text-sm text-gray-500">{greeting}</p>
           <p className="font-semibold text-gray-800">{user?.name || "User"}</p>
