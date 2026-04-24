@@ -1,27 +1,40 @@
-import React, { useState } from 'react';
-import { EnvelopeSimple, Phone, MapPin, PaperPlaneTilt, Briefcase, Clock } from '@phosphor-icons/react';
+import React, { useState } from "react";
+import {
+  EnvelopeSimple,
+  Phone,
+  MapPin,
+  PaperPlaneTilt,
+  Briefcase,
+  Clock,
+} from "@phosphor-icons/react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
+    fullName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for contacting us! We will get back to you soon.');
-    setFormData({ fullName: '', email: '', phone: '', subject: '', message: '' });
+    console.log("Form submitted:", formData);
+    alert("Thank you for contacting us! We will get back to you soon.");
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    });
   };
 
   return (
@@ -30,7 +43,8 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto px-6">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
           <p className="max-w-2xl text-blue-100 text-base">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Have questions? We'd love to hear from you. Send us a message and
+            we'll respond as soon as possible.
           </p>
         </div>
       </section>
@@ -40,7 +54,9 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-3 gap-6 items-start">
             <div className="lg:col-span-1 space-y-4">
               <div className="rounded-xl border border-gray-200 bg-white p-5">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Get in Touch</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  Get in Touch
+                </h2>
 
                 <div className="space-y-5 text-sm text-gray-700">
                   <div className="flex gap-3">
@@ -80,7 +96,9 @@ export default function ContactPage() {
               </div>
 
               <div className="rounded-xl border border-blue-300 bg-blue-50 p-5">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Business Hours</h3>
+                <h3 className="text-base font-semibold text-gray-900 mb-4">
+                  Business Hours
+                </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between text-gray-700">
                     <span>Monday - Friday</span>
@@ -99,12 +117,17 @@ export default function ContactPage() {
             </div>
 
             <div className="lg:col-span-2 rounded-xl border border-gray-200 bg-white p-5 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-5">Send us a Message</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-5">
+                Send us a Message
+              </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-800 mb-1">
+                    <label
+                      htmlFor="fullName"
+                      className="block text-sm font-medium text-gray-800 mb-1"
+                    >
                       Full Name *
                     </label>
                     <input
@@ -119,7 +142,10 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-1">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-800 mb-1"
+                    >
                       Email *
                     </label>
                     <input
@@ -134,7 +160,10 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-800 mb-1">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-800 mb-1"
+                    >
                       Phone Number
                     </label>
                     <input
@@ -148,7 +177,10 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-800 mb-1">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium text-gray-800 mb-1"
+                    >
                       Subject
                     </label>
                     <input
@@ -163,7 +195,10 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-800 mb-1">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-800 mb-1"
+                  >
                     Message *
                   </label>
                   <textarea
@@ -191,30 +226,44 @@ export default function ContactPage() {
 
       <section className="py-8">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-8">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-bold text-gray-900 text-center mb-8">
+            Frequently Asked Questions
+          </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="rounded-xl border border-gray-200 bg-white p-5">
-              <h3 className="font-semibold text-gray-900 mb-2">How do I register as a candidate?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                How do I register as a candidate?
+              </h3>
               <p className="text-sm text-gray-600">
-                Visit our Registration page and fill out the Candidate Zone form. You'll get instant access to browse jobs and apply.
+                Visit our Registration page and fill out the Candidate Zone
+                form. You'll get instant access to browse jobs and apply.
               </p>
             </div>
             <div className="rounded-xl border border-gray-200 bg-white p-5">
-              <h3 className="font-semibold text-gray-900 mb-2">How long does employer approval take?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                How long does employer approval take?
+              </h3>
               <p className="text-sm text-gray-600">
-                Employer accounts are typically reviewed within 24-48 hours. You'll receive an email once approved.
+                Employer accounts are typically reviewed within 24-48 hours.
+                You'll receive an email once approved.
               </p>
             </div>
             <div className="rounded-xl border border-gray-200 bg-white p-5">
-              <h3 className="font-semibold text-gray-900 mb-2">What services do you offer to job seekers?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                What services do you offer to job seekers?
+              </h3>
               <p className="text-sm text-gray-600">
-                We offer resume writing, career counseling, LinkedIn optimization, mock interviews, skill assessments, and more.
+                We offer resume writing, career counseling, LinkedIn
+                optimization, mock interviews, skill assessments, and more.
               </p>
             </div>
             <div className="rounded-xl border border-gray-200 bg-white p-5">
-              <h3 className="font-semibold text-gray-900 mb-2">Can I get a refund for certification programs?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Can I get a refund for certification programs?
+              </h3>
               <p className="text-sm text-gray-600">
-                Yes, we offer a 7-day money back guarantee for all certification programs. Contact us for details.
+                Yes, we offer a 7-day money back guarantee for all certification
+                programs. Contact us for details.
               </p>
             </div>
           </div>
@@ -229,7 +278,8 @@ export default function ContactPage() {
                 <Briefcase size={16} /> JobConnect
               </p>
               <p className="text-sm text-blue-100/70">
-                Connecting talent with opportunity through comprehensive placement and training services.
+                Connecting talent with opportunity through comprehensive
+                placement and training services.
               </p>
             </div>
 

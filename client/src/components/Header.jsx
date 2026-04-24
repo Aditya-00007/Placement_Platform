@@ -84,7 +84,7 @@ export default function Header({ toggleSidebar, user, status }) {
         </span>
 
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
+        <div className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
           {user?.name?.charAt(0)?.toUpperCase() || "U"}
         </div>
       </div>
