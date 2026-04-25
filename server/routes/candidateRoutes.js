@@ -1,6 +1,8 @@
 import express from "express";
 import { userAuth, isCandidate } from "../middleware/userMiddleware.js";
 import pool from "../config/db.js";
+import { getTestQuestions } from "../controllers/getTestQuestions.js";
+import { submitTest } from "../controllers/submitTest.js";
 
 const router = express.Router();
 
@@ -534,5 +536,8 @@ router.post("/apply/:jobId", userAuth, isCandidate, async (req, res) => {
     client.release();
   }
 });
+
+router.get("/test/:jobId", getTestQuestions);
+router.post("test/submit", submitTest);
 
 export default router;

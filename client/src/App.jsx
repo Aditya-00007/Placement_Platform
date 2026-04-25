@@ -20,6 +20,7 @@ import EmployerDashboard from "./pages/EmployerDashboard";
 import EmployerProfile from "./pages/EmployerProfile";
 import JobsPage from "./pages/JobsPage";
 import ApplicationsPage from "./pages/ApplicationsPage";
+import Tests from "./pages/Tests";
 
 // Admin
 import AdminLogin from "./pages/AdminLogin";
@@ -27,6 +28,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminJobs from "./pages/AdminJobs";
 import AdminCandidatesPage from "./pages/AdminCandidatesPage";
 import AdminEmployersPage from "./pages/AdminEmployersPage";
+import AdminQuestionsPage from "./pages/AdminQuestionsPage";
 
 // Routes Protection
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -72,6 +74,14 @@ export default function App() {
         }
       />
       <Route
+        path="/employer/tests"
+        element={
+          <ProtectedRoute allowedRoles={["employer"]}>
+            <Tests />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/employer/profile"
         element={
           <ProtectedRoute allowedRoles={["employer"]}>
@@ -104,6 +114,14 @@ export default function App() {
         element={
           <AdminRoute>
             <AdminDashboard />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/questions"
+        element={
+          <AdminRoute>
+            <AdminQuestionsPage />
           </AdminRoute>
         }
       />

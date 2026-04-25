@@ -1,0 +1,77 @@
+skill,difficulty,question,option_a,option_b,option_c,option_d,correct_option
+JavaScript,EASY,What is JavaScript?,Programming Language,Database,OS,Compiler,A
+JavaScript,EASY,Which keyword declares variable?,var,loop,print,select,A
+JavaScript,EASY,Which symbol used for comments?,//,**,##,@@,A
+JavaScript,EASY,JS is executed on?,Browser,Server,Database,Compiler,A
+JavaScript,EASY,Which is not datatype?,Number,String,Boolean,Table,D
+JavaScript,MEDIUM,What is closure?,Function with scope,Object,Loop,Array,A
+JavaScript,MEDIUM,Which method adds element?,push,remove,cut,delete,A
+JavaScript,MEDIUM,Which operator checks equality?,==,++,--,**,A
+JavaScript,HARD,What is hoisting?,Variable lifting,Looping,Sorting,Rendering,A
+JavaScript,HARD,What is promise?,Async handling,Object,Loop,Variable,A
+
+React,EASY,What is React?,Library,Database,Language,Framework,A
+React,EASY,JSX stands for?,JavaScript XML,Java Syntax,JSON XML,None,A
+React,EASY,useState is?,Hook,Loop,API,Variable,A
+React,EASY,React used for?,UI,Backend,DB,Testing,A
+React,EASY,Component returns?,JSX,HTML,SQL,JSON,A
+React,MEDIUM,Virtual DOM is?,Copy of DOM,Real DOM,API,Library,A
+React,MEDIUM,Props are?,Inputs,Outputs,Loops,Functions,A
+React,MEDIUM,State is?,Data,Object,Loop,API,A
+React,HARD,useEffect is?,Hook,Loop,Variable,Class,A
+React,HARD,Re-render happens when?,State change,File save,Compile,Install,A
+
+Node,EASY,Node is?,Runtime,Database,OS,Language,A
+Node,EASY,Node runs on?,V8 engine,MySQL,Java,Python,A
+Node,EASY,Which module for server?,http,fs,os,path,A
+Node,EASY,npm is?,Package manager,Compiler,Server,DB,A
+Node,EASY,File system module?,fs,http,path,net,A
+Node,MEDIUM,Express is?,Framework,Library,DB,OS,A
+Node,MEDIUM,Middleware is?,Function,Loop,Variable,API,A
+Node,MEDIUM,Which handles routes?,Express,Node,DB,OS,A
+Node,HARD,Event loop is?,Async system,Loop,DB,Compiler,A
+Node,HARD,Non-blocking means?,Async,Sync,Loop,Wait,A
+
+SQL,EASY,SQL used for?,Database,UI,Backend,OS,A
+SQL,EASY,Select command?,Fetch,Delete,Update,Insert,A
+SQL,EASY,Insert command?,Add,Remove,Fetch,Edit,A
+SQL,EASY,Delete command?,Remove,Add,Fetch,Edit,A
+SQL,EASY,Update command?,Modify,Add,Fetch,Delete,A
+SQL,MEDIUM,Primary key?,Unique id,Duplicate,Null,Index,A
+SQL,MEDIUM,Foreign key?,Reference,Unique,Null,Index,A
+SQL,MEDIUM,Join is?,Combine tables,Delete,Insert,Update,A
+SQL,HARD,Normalization?,Reduce redundancy,Increase data,Delete data,Copy,A
+SQL,HARD,Index used for?,Fast search,Delete,Insert,Update,A
+
+DBMS,EASY,DBMS stands for?,Database Management System,Data Backup System,Data Build System,Database Main System,A
+DBMS,EASY,Data stored in?,Tables,Files,Programs,Apps,A
+DBMS,EASY,Row is?,Record,Column,Table,Key,A
+DBMS,EASY,Column is?,Field,Row,Table,Key,A
+DBMS,EASY,Key is?,Identifier,Loop,Variable,File,A
+DBMS,MEDIUM,ER model?,Entity relation,Error model,Event rule,Entry rule,A
+DBMS,MEDIUM,Transaction is?,Operation,Loop,Variable,Table,A
+DBMS,MEDIUM,ACID means?,Atomicity etc,Loop,Table,File,A
+DBMS,HARD,Deadlock is?,Blocking,Loop,Insert,Delete,A
+DBMS,HARD,Concurrency is?,Parallel access,Loop,Insert,Delete,A
+
+OS,EASY,OS stands for?,Operating System,Open Software,Output System,Object System,A
+OS,EASY,Example of OS?,Windows,SQL,HTML,React,A
+OS,EASY,CPU is?,Processor,Memory,Disk,Input,A
+OS,EASY,RAM is?,Memory,Disk,CPU,Input,A
+OS,EASY,Process is?,Program,File,Loop,Variable,A
+OS,MEDIUM,Scheduling is?,Task order,Loop,Insert,Delete,A
+OS,MEDIUM,Thread is?,Light process,Heavy process,Loop,Variable,A
+OS,MEDIUM,Deadlock?,Blocking,Loop,Insert,Delete,A
+OS,HARD,Virtual memory?,Extra memory,Disk,CPU,Thread,A
+OS,HARD,Paging?,Memory method,Loop,Insert,Delete,A
+
+OOP,EASY,OOP stands for?,Object Oriented Programming,Open Operation Program,Object Output Program,Other Operation Program,A
+OOP,EASY,Class is?,Blueprint,Object,Loop,Function,A
+OOP,EASY,Object is?,Instance,Loop,Variable,File,A
+OOP,EASY,Encapsulation?,Data hiding,Loop,Insert,Delete,A
+OOP,EASY,Inheritance?,Reuse,Loop,Insert,Delete,A
+OOP,MEDIUM,Polymorphism?,Many forms,Loop,Insert,Delete,A
+OOP,MEDIUM,Abstraction?,Hide details,Loop,Insert,Delete,A
+OOP,MEDIUM,Constructor?,Init function,Loop,Insert,Delete,A
+OOP,HARD,Overloading?,Same name diff work,Loop,Insert,Delete,A
+OOP,HARD,Overriding?,Replace method,Loop,Insert,Delete,A

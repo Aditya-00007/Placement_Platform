@@ -2,6 +2,8 @@ import express from "express";
 import { userAuth, isEmployer } from "../middleware/userMiddleware.js";
 import client from "../config/db.js";
 import pool from "../config/db.js";
+import { createTestConfig } from "../controllers/CreateTestConfig.js";
+import { addTestRules } from "../controllers/AddTestRules.js";
 
 const router = express.Router();
 
@@ -729,5 +731,24 @@ router.patch(
     }
   },
 );
+
+router.post("/test-config", userAuth, isEmployer, createTestConfig);
+router.post("/test-rules", userAuth, isEmployer, addTestRules);
+router.get("/test-status/:jobId", userAuth, isEmployer, async (req, res) => {
+  const { jobId } = req.params;
+
+  try {
+    const result = await pool.query(
+      "SELECT id FROM test_configs WHERE job_id = $1",
+      [jobId],
+    );
+
+    res.json({
+      hasTest: result.rows.length > 0,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 export default router;

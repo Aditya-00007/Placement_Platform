@@ -8,6 +8,7 @@ export default function AdminSidebar({ collapsed }) {
     { name: "Jobs", path: "/admin/jobs", icon: "📄" },
     { name: "Candidates", path: "/admin/candidates", icon: "🎓" },
     { name: "Employers", path: "/admin/employers", icon: "💼" },
+    { name: "Questions", path: "/admin/questions", icon: "🧾" },
   ];
 
   return (

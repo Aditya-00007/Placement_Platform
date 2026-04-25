@@ -29,6 +29,7 @@ CREATE TABLE test_config_rules (
 ALTER TABLE applications
 ADD COLUMN test_score INT DEFAULT 0,
 ADD COLUMN test_total INT DEFAULT 0,
+ADD COLUMN time_taken INT,  
 ADD COLUMN test_submitted BOOLEAN DEFAULT FALSE,
 ADD COLUMN is_verified BOOLEAN DEFAULT FALSE,
 ADD COLUMN test_started_at TIMESTAMP,
@@ -41,3 +42,5 @@ CREATE TABLE application_answers (
     selected_option CHAR(1),
     is_correct BOOLEAN
 );
+
+skill,difficulty,question,option_a,option_b,option_c,option_d,correct_option

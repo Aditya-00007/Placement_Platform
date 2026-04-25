@@ -2,6 +2,8 @@ import express from "express";
 import { loginAdmin } from "../controllers/adminController.js";
 import adminAuth from "../middleware/adminMiddleware.js";
 import pool from "../config/db.js";
+import { uploadQuestionsCSV } from "../controllers/UploadQuestionsCSV.js";
+import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -277,5 +279,12 @@ router.put("/employers/:id/reject", adminAuth, async (req, res) => {
 
   res.json({ msg: "Employer rejected" });
 });
+
+router.post(
+  "/upload-questions",
+  adminAuth,
+  upload.single("file"),
+  uploadQuestionsCSV,
+);
 
 export default router;

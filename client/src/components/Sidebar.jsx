@@ -7,6 +7,7 @@ export default function Sidebar({ collapsed }) {
     { name: "Dashboard", path: "/employer/dashboard", icon: "🏠" },
     { name: "Jobs", path: "/employer/jobs", icon: "💼" },
     { name: "Applications", path: "/employer/applications", icon: "📄" },
+    { name: "Tests", path: "/employer/tests", icon: "🧾" },
     { name: "Profile", path: "/employer/profile", icon: "👤" },
   ];
 
