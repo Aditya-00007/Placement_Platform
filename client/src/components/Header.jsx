@@ -11,7 +11,7 @@ export default function Header({ toggleSidebar, user, status }) {
     else setGreeting("Good Evening 🌙 ");
   }, []);
 
-  // 🎯 Status Badge UI
+  // Status Badge UI
   const renderStatusBadge = () => {
     if (user?.role !== "employer") return null;
 

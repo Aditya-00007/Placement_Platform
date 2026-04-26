@@ -33,13 +33,20 @@ import AdminQuestionsPage from "./pages/AdminQuestionsPage";
 // Routes Protection
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import GuestRoute from "./components/GuestRoute";
 import Unauthorized from "./pages/Unauthorized";
 
 export default function App() {
   return (
     <Routes>
       {/* public routes */}
-      <Route element={<PublicLayout />}>
+      <Route
+        element={
+          <GuestRoute>
+            <PublicLayout />
+          </GuestRoute>
+        }
+      >
         <Route path="/" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/certification" element={<CertificationPage />} />
@@ -50,8 +57,22 @@ export default function App() {
       </Route>
 
       {/* Auth */}
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/signin"
+        element={
+          <GuestRoute>
+            <Signin />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <GuestRoute>
+            <Signup />
+          </GuestRoute>
+        }
+      />
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/*  CANDIDATE routes */}
@@ -107,7 +128,14 @@ export default function App() {
       />
 
       {/*  ADMIN routs */}
-      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+        path="/admin/login"
+        element={
+          <GuestRoute>
+            <AdminLogin />
+          </GuestRoute>
+        }
+      />
 
       <Route
         path="/admin/dashboard"
