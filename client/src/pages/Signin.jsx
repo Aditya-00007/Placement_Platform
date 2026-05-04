@@ -34,7 +34,7 @@ const Signin = () => {
         // SAVE TOKEN
         localStorage.setItem("token", data.token);
         //  SAVE ROLE ( HERE)
-        localStorage.setItem("role", data.user.role);
+        localStorage.setItem("role", data.user.role.toLowerCase().trim());
         // ROLE BASED REDIRECT
         if (data.user.role === "employer") {
           navigate("/employer/dashboard");

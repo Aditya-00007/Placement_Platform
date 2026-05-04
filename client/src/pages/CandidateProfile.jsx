@@ -13,29 +13,35 @@ export default function CandidateProfile() {
   });
 
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
+  // ✅ FETCH PROFILE
   const fetchProfile = async () => {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await axios.get("/api/candidate/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const res = await axios.get("/api/candidate/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setData({
-      profile: res.data.profile || {},
-      education: res.data.education || [],
-      experience: res.data.experience || [],
-      projects: res.data.projects || [],
-      skills: res.data.skills || [],
-      certifications: res.data.certifications || [],
-    });
+      setData({
+        profile: res.data.profile || {},
+        education: res.data.education || [],
+        experience: res.data.experience || [],
+        projects: res.data.projects || [],
+        skills: res.data.skills || [],
+        certifications: res.data.certifications || [],
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // 🔹 Handle profile change
+  // ✅ PROFILE CHANGE
   const handleProfileChange = (e) => {
     setData({
       ...data,
@@ -43,35 +49,57 @@ export default function CandidateProfile() {
     });
   };
 
-  // 🔹 Handle array change
+  // ✅ ARRAY CHANGE
   const handleArrayChange = (section, index, e) => {
     const updated = [...data[section]];
     updated[index][e.target.name] = e.target.value;
-
     setData({ ...data, [section]: updated });
   };
 
-  // 🔹 Add new item
+  // ✅ ADD ITEM
   const addItem = (section, template) => {
     setData({ ...data, [section]: [...data[section], template] });
   };
 
-  // 🔹 Remove item
+  // ✅ REMOVE ITEM
   const removeItem = (section, index) => {
     const updated = data[section].filter((_, i) => i !== index);
     setData({ ...data, [section]: updated });
   };
 
-  // 🔹 Save
+  // ✅ SAVE PROFILE
   const handleSave = async () => {
-    const token = localStorage.getItem("token");
+    try {
+      setLoading(true);
 
-    await axios.post("/api/candidate/profile", data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const token = localStorage.getItem("token");
 
-    setEditMode(false);
-    fetchProfile();
+      // 🔥 IMPORTANT: send correct backend structure
+      await axios.post(
+        "/api/candidate/profile",
+        {
+          ...data.profile,
+          education: data.education,
+          experience: data.experience,
+          projects: data.projects,
+          skills: data.skills,
+          certifications: data.certifications,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      alert("✅ Profile saved successfully!");
+
+      setEditMode(false);
+      fetchProfile();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Error saving profile");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -79,10 +107,10 @@ export default function CandidateProfile() {
       <div className="p-6 max-w-6xl mx-auto">
 
         {/* HEADER */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-6 bg-white p-4 rounded-xl shadow">
           <img
             src={data.profile.profile_photo || "/default.png"}
-            className="w-20 h-20 rounded-full"
+            className="w-20 h-20 rounded-full border"
           />
 
           <div className="flex-1">
@@ -93,19 +121,19 @@ export default function CandidateProfile() {
                 name="profile_photo"
                 value={data.profile.profile_photo || ""}
                 onChange={handleProfileChange}
-                className="border p-2 mt-2 w-full"
+                className="border p-2 mt-2 w-full rounded"
                 placeholder="Image URL"
               />
             )}
           </div>
-        </div>
 
-        <button
-          onClick={() => setEditMode(!editMode)}
-          className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          {editMode ? "Cancel" : "Edit Profile"}
-        </button>
+          <button
+            onClick={() => setEditMode(!editMode)}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            {editMode ? "Cancel" : "Edit"}
+          </button>
+        </div>
 
         {/* BASIC INFO */}
         <Section title="Basic Info">
@@ -186,12 +214,14 @@ export default function CandidateProfile() {
           {editMode && <AddBtn onClick={()=>addItem("certifications", {})} />}
         </Section>
 
+        {/* SAVE BUTTON */}
         {editMode && (
           <button
             onClick={handleSave}
-            className="mt-6 bg-green-500 text-white px-6 py-2 rounded"
+            disabled={loading}
+            className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded w-full"
           >
-            Save Profile
+            {loading ? "Saving..." : "Save Profile"}
           </button>
         )}
       </div>
@@ -199,7 +229,7 @@ export default function CandidateProfile() {
   );
 }
 
-/* 🔹 UI Components */
+/* UI COMPONENTS */
 function Section({ title, children }) {
   return (
     <div className="bg-white p-4 rounded-xl shadow mb-4">
@@ -218,22 +248,22 @@ function Input({ label, name, value, editMode, onChange }) {
           name={name}
           value={value || ""}
           onChange={onChange}
-          className="border w-full p-2 mt-1"
+          className="border w-full p-2 mt-1 rounded"
         />
       ) : (
-        <p>{value || "-"}</p>
+        <p className="text-gray-700">{value || "-"}</p>
       )}
     </div>
   );
 }
 
 function Card({ children }) {
-  return <div className="border p-3 mb-2 rounded">{children}</div>;
+  return <div className="border p-3 mb-2 rounded bg-gray-50">{children}</div>;
 }
 
 function AddBtn({ onClick }) {
   return (
-    <button onClick={onClick} className="bg-blue-400 text-white px-3 py-1 rounded">
+    <button onClick={onClick} className="bg-blue-500 text-white px-3 py-1 rounded mt-2">
       + Add
     </button>
   );
@@ -241,7 +271,7 @@ function AddBtn({ onClick }) {
 
 function RemoveBtn({ onClick }) {
   return (
-    <button onClick={onClick} className="bg-red-400 text-white px-2 py-1 mt-2 rounded">
+    <button onClick={onClick} className="bg-red-500 text-white px-2 py-1 mt-2 rounded">
       Remove
     </button>
   );

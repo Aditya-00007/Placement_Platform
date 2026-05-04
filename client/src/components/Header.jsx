@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 👈 added
 
 export default function Header({ toggleSidebar, user, status }) {
+  const navigate = useNavigate(); // 👈 added
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
     const hour = new Date().getHours();
-
     if (hour < 12) setGreeting("Good Morning ☀️");
     else if (hour < 18) setGreeting("Good Afternoon 🌤️");
     else setGreeting("Good Evening 🌙 ");
   }, []);
 
+
   // Status Badge UI
+
   const renderStatusBadge = () => {
     if (user?.role !== "employer") return null;
 
@@ -63,8 +66,6 @@ export default function Header({ toggleSidebar, user, status }) {
                 {user?.role === "employer" && "Employer Panel"}
                 {user?.role === "candidate" && "Candidate Dashboard"}
               </span>
-
-              {/* ✅ Status Badge here */}
               {renderStatusBadge()}
             </div>
           </div>
@@ -83,10 +84,19 @@ export default function Header({ toggleSidebar, user, status }) {
           {user?.role}
         </span>
 
+
         {/* Avatar */}
         <div className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
+
+        {/* Avatar - 👇 added onClick and cursor-pointer */}
+        <div
+          onClick={() => navigate(`/${user?.role}/profile`)}
+          className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm cursor-pointer hover:opacity-80 transition"
+        >
+
           {user?.name?.charAt(0)?.toUpperCase() || "U"}
         </div>
+      </div>
       </div>
     </nav>
   );

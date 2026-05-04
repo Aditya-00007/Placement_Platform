@@ -2,38 +2,46 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
 import ApplyJobModal from "../components/modals/ApplyJobModal";
+import CandidateJobViewModal from "../components/modals/CandidateJobViewModel"; // ✅ FIXED NAME
 
 export default function CandidateJobs() {
   const [jobs, setJobs] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [filter, setFilter] = useState("OPEN");
+  const [sort, setSort] = useState("recent");
+
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [filter, sort]);
 
+  // ✅ FETCH JOBS
   const fetchJobs = async () => {
-    try {
-      const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-      const res = await axios.get("/api/employer/jobs", {
+    const res = await axios.get(
+      `http://localhost:5000/api/candidate/jobs?filter=${filter}&sort=${sort}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      }
+    );
 
-      // IMPORTANT: show only OPEN jobs
-      const openJobs = res.data.jobs.filter(
-        (job) => job.status === "OPEN"
-      );
+    console.log("Jobs API Response:", res.data);
 
-      setJobs(openJobs);
-    } catch (err) {
-      console.error("Error fetching jobs:", err);
-    }
-  };
-
-  // APPLY FUNCTION (matches backend)
+    setJobs(res.data.jobs || []);
+  } catch (err) {
+    console.error("Fetch jobs error:", err);
+    setJobs([]);
+  }
+};
+  // ✅ APPLY JOB
   const handleApply = async (payload) => {
     try {
       const token = localStorage.getItem("token");
@@ -50,10 +58,11 @@ export default function CandidateJobs() {
         }
       );
 
-      alert("✅ Application submitted!");
+      alert("✅ Applied successfully!");
+      setShowApplyModal(false);
       console.log(res.data);
     } catch (err) {
-      alert(err.response?.data?.error || "Application failed");
+      alert(err.response?.data?.error || "Error applying");
     }
   };
 
@@ -62,6 +71,28 @@ export default function CandidateJobs() {
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-6">Available Jobs</h1>
 
+        {/* FILTERS */}
+        <div className="flex gap-4 mb-4">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="border p-2 rounded-sm"
+          >
+            <option value="OPEN">Open</option>
+            <option value="CLOSED">Closed</option>
+          </select>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="border p-2 rounded-sm"
+          >
+            <option value="recent">Recent</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+
+        {/* TABLE */}
         <div className="bg-white shadow rounded overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-gray-100">
@@ -69,15 +100,16 @@ export default function CandidateJobs() {
                 <th className="p-3">Title</th>
                 <th className="p-3">Location</th>
                 <th className="p-3">Type</th>
-                <th className="p-3">Action</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Actions</th>
               </tr>
             </thead>
 
             <tbody>
               {jobs.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="text-center p-4">
-                    No jobs available
+                  <td colSpan="5" className="text-center p-4">
+                    No jobs found
                   </td>
                 </tr>
               ) : (
@@ -88,12 +120,41 @@ export default function CandidateJobs() {
                     <td className="p-3">{job.job_type}</td>
 
                     <td className="p-3">
+                      <span
+                        className={`px-2 py-1 rounded text-white ${
+                          job.status === "OPEN"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </td>
+
+                    <td className="p-3 flex gap-2">
+                      {/* VIEW */}
                       <button
                         onClick={() => {
-                          setSelectedJob(job);
-                          setShowModal(true);
+                          setSelectedJobId(job.id);
+                          setShowViewModal(true);
                         }}
-                        className="bg-green-600 text-white px-3 py-1 rounded"
+                        className="bg-gray-200 px-2 py-1 rounded"
+                      >
+                        View
+                      </button>
+
+                      {/* APPLY */}
+                      <button
+                        disabled={job.status !== "OPEN"}
+                        onClick={() => {
+                          setSelectedJob(job);
+                          setShowApplyModal(true);
+                        }}
+                        className={`px-3 py-1 rounded ${
+                          job.status === "OPEN"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-300 cursor-not-allowed"
+                        }`}
                       >
                         Apply
                       </button>
@@ -106,13 +167,22 @@ export default function CandidateJobs() {
         </div>
       </div>
 
-      {/* MODAL */}
-      {showModal && (
+      {/* APPLY MODAL */}
+      {showApplyModal && (
         <ApplyJobModal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
+          isOpen={showApplyModal}
+          onClose={() => setShowApplyModal(false)}
           onSubmit={handleApply}
           job={selectedJob}
+        />
+      )}
+
+      {/* VIEW MODAL */}
+      {showViewModal && (
+        <CandidateJobViewModal
+          isOpen={showViewModal}
+          onClose={() => setShowViewModal(false)}
+          jobId={selectedJobId}
         />
       )}
     </DashboardLayout>
