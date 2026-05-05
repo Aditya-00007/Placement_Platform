@@ -1,59 +1,109 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import DashboardLayout from "../components/DashboardLayout";
 
-function Dashboard() {
-  const role = localStorage.getItem("role");
-  const [isOpen, setIsOpen] = useState(false);
+export default function CandidateDashboard() {
+  const navigate = useNavigate();
+
+  const [stats, setStats] = useState({
+    availableJobs: 0,
+    appliedJobs: 0,
+    accepted: 0,
+    rejected: 0,
+  });
+
+  const [recentJobs, setRecentJobs] = useState([]);
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const fetchDashboard = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get("/api/candidate/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setStats(res.data?.stats || {
+        availableJobs: 0,
+        appliedJobs: 0,
+        accepted: 0,
+        rejected: 0,
+      });
+
+      setRecentJobs(res.data?.recentJobs || []);
+      setRecommendedJobs(res.data?.recommendedJobs || []);
+    } catch (err) {
+      console.error("Dashboard error:", err);
+     
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <DashboardLayout>
+      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-      {/* 🔝 Topbar */}
-      <div className="flex justify-between items-center bg-white p-4 shadow">
-        
-        {/* ☰ Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-2xl font-bold"
-        >
-          ☰
-        </button>
-
-        <h1 className="text-xl font-semibold">Placement Portal</h1>
-
-        <p className="bg-gray-200 rounded-lg px-4 py-2">
-          {role === "employer" ? "Employer" : "Candidate"}
-        </p>
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <StatCard title="Available Jobs" value={stats.availableJobs} />
+        <StatCard title="Applied Jobs" value={stats.appliedJobs} />
+        <StatCard title="Accepted" value={stats.accepted} />
+        <StatCard title="Rejected" value={stats.rejected} />
       </div>
 
-      {/* 🔻 Layout */}
-      <div className="flex">
+      <div className="bg-white p-4 rounded shadow mb-6">
+        <h3 className="text-lg font-semibold mb-3">Recent Jobs</h3>
 
-        {/* 🔥 Sidebar */}
-        <div
-          className={`bg-gray-900 text-white min-h-screen transition-all duration-300
-          ${isOpen ? "w-64 p-4" : "w-0 overflow-hidden"}`}
-        >
-          <nav className="space-y-3 mt-4">
-            <div className="bg-gray-700 p-3 rounded-lg">Dashboard</div>
-            <div className="hover:bg-gray-700 p-3 rounded-lg cursor-pointer">Profile</div>
-            <div className="hover:bg-gray-700 p-3 rounded-lg cursor-pointer">View Jobs</div>
-            <div className="hover:bg-gray-700 p-3 rounded-lg cursor-pointer">Apply</div>
-            <div className="hover:bg-gray-700 p-3 rounded-lg cursor-pointer">Application Status</div>
-          </nav>
-
-          <div className="mt-auto text-red-400 cursor-pointer">Logout</div>
-        </div>
-
-        {/* 📄 Main Content */}
-        <div
-          className={`flex-1 p-6 transition-all duration-300`}
-        >
-          <h2 className="text-lg font-semibold">Dashboard Content</h2>
-        </div>
-
+        {recentJobs.length === 0 ? (
+          <p>No jobs available</p>
+        ) : (
+          recentJobs.map((job) => (
+            <div key={job.id} className="border-b py-2 flex justify-between">
+              <div>
+                <p className="font-medium">{job.title}</p>
+                <p className="text-sm text-gray-500">{job.location}</p>
+              </div>
+              <span className="text-sm text-blue-500">
+                ₹{job.salary || "N/A"}
+              </span>
+            </div>
+          ))
+        )}
       </div>
-    </div>
+
+      <div className="bg-white p-4 rounded shadow">
+        <h3 className="text-lg font-semibold mb-3">Recommended Jobs</h3>
+
+        {recommendedJobs.length === 0 ? (
+          <p>No recommendations yet</p>
+        ) : (
+          recommendedJobs.map((job) => (
+            <div key={job.id} className="border-b py-2 flex justify-between">
+              <div>
+                <p className="font-medium">{job.title}</p>
+                <p className="text-sm text-gray-500">{job.location}</p>
+              </div>
+              <span className="text-sm text-green-500">
+                Match: {job.match_score || 0}%
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+    </DashboardLayout>
   );
 }
 
-export default Dashboard;
+function StatCard({ title, value }) {
+  return (
+    <div className="bg-white p-4 rounded shadow text-center">
+      <p className="text-gray-500 text-sm">{title}</p>
+      <h2 className="text-2xl font-bold">{value || 0}</h2>
+    </div>
+  );
+}

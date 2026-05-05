@@ -7,17 +7,85 @@ import { submitTest } from "../controllers/submitTest.js";
 const router = express.Router();
 
 router.get("/dashboard", userAuth, isCandidate, async (req, res) => {
-  const candResult = await pool.query(
-    "SELECT id FROM candidates WHERE user_id = $1",
-    [req.user.id],
-  );
+  try {
+    // 1. Get candidate_id
+    const candResult = await pool.query(
+      "SELECT id FROM candidates WHERE user_id = $1",
+      [req.user.id]
+    );
 
-  if (candResult.rows.length === 0) {
-    return res.status(404).json({ error: "Candidate not found" });
+    if (candResult.rows.length === 0) {
+      return res.status(404).json({ error: "Candidate not found" });
+    }
+
+    const candidate_id = candResult.rows[0].id;
+
+    // =========================
+    // 2. STATS
+    // =========================
+
+    const statsQuery = await pool.query(
+      `
+      SELECT
+        (SELECT COUNT(*) FROM jobs WHERE status='OPEN') AS available_jobs,
+        (SELECT COUNT(*) FROM applications WHERE candidate_id=$1) AS applied_jobs,
+        (SELECT COUNT(*) FROM applications WHERE candidate_id=$1 AND status='HIRED') AS accepted,
+        (SELECT COUNT(*) FROM applications WHERE candidate_id=$1 AND status='REJECTED') AS rejected
+      `,
+      [candidate_id]
+    );
+
+    // =========================
+    // 3. RECENT JOBS
+    // =========================
+
+    const recentJobsQuery = await pool.query(
+      `
+      SELECT id, title, location, salary_min
+      FROM jobs
+      WHERE status='OPEN'
+      ORDER BY created_at DESC
+      LIMIT 5
+      `
+    );
+
+    // =========================
+    // 4. RECOMMENDED JOBS (simple for now)
+    // =========================
+
+    const recommendedJobsQuery = await pool.query(
+      `
+      SELECT j.id, j.title, j.location,
+      COALESCE(a.match_score, 0) AS match_score
+      FROM jobs j
+      LEFT JOIN applications a
+      ON j.id = a.job_id AND a.candidate_id = $1
+      WHERE j.status='OPEN'
+      ORDER BY match_score DESC NULLS LAST
+      LIMIT 5
+      `,
+      [candidate_id]
+    );
+
+    // =========================
+    // FINAL RESPONSE
+    // =========================
+
+    res.json({
+      stats: {
+        availableJobs: Number(statsQuery.rows[0].available_jobs),
+        appliedJobs: Number(statsQuery.rows[0].applied_jobs),
+        accepted: Number(statsQuery.rows[0].accepted),
+        rejected: Number(statsQuery.rows[0].rejected),
+      },
+      recentJobs: recentJobsQuery.rows,
+      recommendedJobs: recommendedJobsQuery.rows,
+    });
+
+  } catch (err) {
+    console.error("Dashboard error:", err);
+    res.status(500).json({ error: "Server error" });
   }
-
-  const Candidate = candResult.rows[0].name;
-  res.json({ msg: "Welcome Candidate", Candidate: Candidate });
 });
 
 router.get("/profile", userAuth, isCandidate, async (req, res) => {
@@ -539,5 +607,102 @@ router.post("/apply/:jobId", userAuth, isCandidate, async (req, res) => {
 
 router.get("/test/:jobId", getTestQuestions);
 router.post("test/submit", submitTest);
+router.get("/applications", userAuth, isCandidate, async (req, res) => {
+  try {
+    const candResult = await pool.query(
+      "SELECT id FROM candidates WHERE user_id = $1",
+      [req.user.id]
+    );
+
+    if (candResult.rows.length === 0) {
+      return res.status(404).json({ error: "Candidate not found" });
+    }
+
+    const candidate_id = candResult.rows[0].id;
+
+    const result = await pool.query(
+      `
+      SELECT 
+        a.id,
+         a.job_id,
+        a.status,
+        a.applied_at,
+        j.title,
+        j.location,
+        j.job_type,
+        j.status AS job_status
+      FROM applications a
+      JOIN jobs j ON a.job_id = j.id
+      WHERE a.candidate_id = $1
+      ORDER BY a.applied_at DESC
+      `,
+      [candidate_id]
+    );
+
+    res.json({ applications: result.rows });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/jobs", userAuth, isCandidate, async (req, res) => {
+  try {
+    const { filter, sort } = req.query;
+
+    let query = `
+      SELECT id, title, location, job_type, status, description, created_at
+      FROM jobs
+      WHERE 1=1
+    `;
+
+    const values = [];
+
+    // FILTER
+    if (filter && filter !== "ALL") {
+      values.push(filter);
+      query += ` AND status = $${values.length}`;
+    }
+
+    // SORT
+    if (sort === "oldest") {
+      query += ` ORDER BY created_at ASC`;
+    } else {
+      query += ` ORDER BY created_at DESC`;
+    }
+
+    const result = await pool.query(query, values);
+
+    res.json({ jobs: result.rows });
+
+  } catch (err) {
+    console.error("Fetch candidate jobs error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/jobs/:id", userAuth, isCandidate, async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    const result = await pool.query(
+      `SELECT id, title, location, job_type, description, status
+       FROM jobs
+       WHERE id = $1`,
+      [jobId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    res.json({ job: result.rows[0] });
+
+  } catch (err) {
+    console.error("Fetch job detail error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 export default router;

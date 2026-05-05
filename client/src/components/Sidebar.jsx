@@ -3,13 +3,26 @@ import { Link, useLocation } from "react-router-dom";
 export default function Sidebar({ collapsed }) {
   const location = useLocation();
 
-  const menuItems = [
+  const role = localStorage.getItem("role");
+
+  const employerMenu = [
     { name: "Dashboard", path: "/employer/dashboard", icon: "🏠" },
     { name: "Jobs", path: "/employer/jobs", icon: "💼" },
     { name: "Applications", path: "/employer/applications", icon: "📄" },
     { name: "Tests", path: "/employer/tests", icon: "🧾" },
     { name: "Profile", path: "/employer/profile", icon: "👤" },
   ];
+
+  const candidateMenu = [
+    { name: "Dashboard", path: "/candidate/dashboard", icon: "🏠" },
+    { name: "Jobs", path: "/candidate/jobs", icon: "💼" },
+    { name: "Applications", path: "/candidate/applications", icon: "📄" },
+    { name: "Profile", path: "/candidate/profile", icon: "👤" },
+  ];
+
+  // 🔥 decide menu based on role
+  const menuItems =
+    role === "candidate" ? candidateMenu : employerMenu;
 
   return (
     <aside className="h-full p-2">
@@ -31,7 +44,6 @@ export default function Sidebar({ collapsed }) {
                   }`}
               >
                 <span>{item.icon}</span>
-
                 {!collapsed && <span>{item.name}</span>}
               </Link>
             </li>
@@ -42,8 +54,8 @@ export default function Sidebar({ collapsed }) {
         <li className="pt-2 border-t border-white/20">
           <button
             onClick={() => {
-              localStorage.removeItem("token");
-              window.location.href = "/login";
+              localStorage.clear(); // better
+              window.location.href = "/signin";
             }}
             className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:bg-red-500/20"
           >
