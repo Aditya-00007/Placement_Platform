@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 
 const Signin = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [openModal, setOpenModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -78,6 +80,12 @@ const Signin = () => {
             placeholder="Password"
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
+          <p
+            onClick={() => setOpenModal(true)}
+            className="text-right text-sm text-blue-500 cursor-pointer hover:underline"
+          >
+            Forgot Password?
+          </p>
 
           {/* BUTTON */}
           <button
@@ -99,6 +107,10 @@ const Signin = () => {
           </Link>
         </p>
       </div>
+      <ResetPasswordModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+      />
     </div>
   );
 };
