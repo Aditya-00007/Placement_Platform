@@ -39,7 +39,7 @@ function Signup() {
     if (!form.email) return alert("Enter email first");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const res = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

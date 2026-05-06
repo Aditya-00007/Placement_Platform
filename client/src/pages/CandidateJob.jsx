@@ -26,7 +26,7 @@ export default function CandidateJobs() {
     const token = localStorage.getItem("token");
 
     const res = await axios.get(
-      `http://localhost:5000/api/candidate/jobs?filter=${filter}&sort=${sort}`,
+      `/api/candidate/jobs?filter=${filter}&sort=${sort}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

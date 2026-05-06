@@ -19,7 +19,7 @@ export default function CandidateApplication() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/candidate/applications",
+        "/api/candidate/applications",
         {
           headers: {
             Authorization: `Bearer ${token}`,
