@@ -3,13 +3,14 @@ import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
 import CandidateJobViewModal from "../components/modals/CandidateJobViewModel";
 
-export default function CandidateApplications() {
+export default function CandidateApplication() {
   const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
 
   useEffect(() => {
-    fetchApplications(); // ✅ IMPORTANT FIX
+    fetchApplications();
   }, []);
 
   // ✅ FETCH APPLICATIONS
@@ -26,16 +27,15 @@ export default function CandidateApplications() {
         }
       );
 
-      console.log("Applications:", res.data);
-
       setApplications(res.data.applications || []);
     } catch (err) {
       console.error("Error fetching applications:", err);
-      setApplications([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ STATUS COLOR
+  // ✅ STATUS UI COLORS
   const getStatusColor = (status) => {
     switch (status) {
       case "APPLIED":
@@ -65,12 +65,18 @@ export default function CandidateApplications() {
                 <th className="p-3">Type</th>
                 <th className="p-3">Applied On</th>
                 <th className="p-3">Status</th>
-                <th className="p-3">Actions</th> {/* ✅ NEW */}
+                <th className="p-3">Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {applications.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="text-center p-4">
+                    Loading...
+                  </td>
+                </tr>
+              ) : applications.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center p-4">
                     No applications found
@@ -87,6 +93,7 @@ export default function CandidateApplications() {
                       {new Date(app.applied_at).toLocaleDateString()}
                     </td>
 
+                    {/* ✅ STATUS BADGE */}
                     <td className="p-3">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
@@ -101,10 +108,10 @@ export default function CandidateApplications() {
                     <td className="p-3">
                       <button
                         onClick={() => {
-                          setSelectedJobId(app.id); // ⚠️ if this doesn't work, use app.job_id
+                          setSelectedJobId(app.job_id); // ✅ correct id
                           setShowViewModal(true);
                         }}
-                        className="bg-gray-200 px-3 py-1 rounded"
+                        className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
                       >
                         View
                       </button>
@@ -117,7 +124,7 @@ export default function CandidateApplications() {
         </div>
       </div>
 
-      {/* ✅ VIEW MODAL */}
+      {/* ✅ JOB VIEW MODAL */}
       {showViewModal && (
         <CandidateJobViewModal
           isOpen={showViewModal}
