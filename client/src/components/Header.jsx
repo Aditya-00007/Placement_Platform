@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // 👈 added
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ toggleSidebar, user, status }) {
-  const navigate = useNavigate(); // 👈 added
+  const navigate = useNavigate();
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
@@ -50,14 +50,14 @@ export default function Header({ toggleSidebar, user, status }) {
 
         <div className="flex items-center gap-3">
           <img
-            src="/Images/download.webp"
+            src="/Images/image.png"
             alt="Company Logo"
-            className="w-15 h-15 object-contain"
+            className="w-20 h-20 object-contain"
           />
 
           <div className="flex flex-col leading-tight">
             <span className="text-xl font-bold text-gray-800">
-              Placement Cell
+              SD Pathways
             </span>
 
             <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function Header({ toggleSidebar, user, status }) {
         {/* Avatar */}
         <div className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
 
-        {/* Avatar - 👇 added onClick and cursor-pointer */}
+        {/* */}
         <div
           onClick={() => navigate(`/${user?.role}/profile`)}
           className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-sm cursor-pointer hover:opacity-80 transition"

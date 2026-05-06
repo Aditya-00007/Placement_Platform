@@ -7,6 +7,7 @@ import {
   Briefcase,
   Clock,
 } from "@phosphor-icons/react";
+import toast from "react-hot-toast";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ export default function ContactPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    alert("Thank you for contacting us! We will get back to you soon.");
+    toast.success("Thank you for contacting us! We will get back to you soon.");
     setFormData({
       fullName: "",
       email: "",

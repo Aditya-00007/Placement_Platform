@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const ResetPasswordModal = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(1);
@@ -29,13 +30,13 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("OTP sent 📩");
+        toast.success("OTP sent 📩");
         setStep(2);
       } else {
-        alert(data.msg);
+        toast.error(data.msg);
       }
     } catch (err) {
-      alert("Error sending OTP");
+      toast.error("Error sending OTP");
     }
   };
 
@@ -59,15 +60,15 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Password reset successful ✅");
+        toast.success("Password reset successful ✅");
         onClose();
         setStep(1);
         setForm({ email: "", otp: "", newPassword: "" });
       } else {
-        alert(data.msg);
+        toast.error(data.msg);
       }
     } catch (err) {
-      alert("Error resetting password");
+      toast.error("Error resetting password");
     }
   };
 

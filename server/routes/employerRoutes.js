@@ -626,6 +626,7 @@ router.get("/applications", userAuth, isEmployer, async (req, res) => {
   let query = `
     SELECT 
       a.id,
+      a.candidate_id,
       a.status,
       a.match_score,
       a.applied_at,
@@ -731,6 +732,75 @@ router.patch(
     }
   },
 );
+
+router.get("/candidate/:id", userAuth, isEmployer, async (req, res) => {
+  try {
+    const candidateId = req.params.id;
+
+    // basic profile
+    const profile = await pool.query(
+      `SELECT c.id,
+              c.name AS full_name,
+              u.email,
+              cp.*
+       FROM candidates c
+       JOIN users u ON c.user_id = u.id
+       LEFT JOIN candidate_profile cp
+       ON c.id = cp.candidate_id
+       WHERE c.id = $1`,
+      [candidateId],
+    );
+
+    // education
+    const education = await pool.query(
+      `SELECT * FROM education
+       WHERE candidate_id = $1
+       ORDER BY passing_year DESC`,
+      [candidateId],
+    );
+
+    // experience
+    const experience = await pool.query(
+      `SELECT * FROM experience
+       WHERE candidate_id = $1
+       ORDER BY start_date DESC`,
+      [candidateId],
+    );
+
+    // projects
+    const projects = await pool.query(
+      `SELECT * FROM projects
+       WHERE candidate_id = $1`,
+      [candidateId],
+    );
+
+    // skills
+    const skills = await pool.query(
+      `SELECT * FROM skills
+       WHERE candidate_id = $1`,
+      [candidateId],
+    );
+
+    // certifications
+    const certifications = await pool.query(
+      `SELECT * FROM certifications
+       WHERE candidate_id = $1`,
+      [candidateId],
+    );
+
+    res.json({
+      profile: profile.rows[0],
+      education: education.rows,
+      experience: experience.rows,
+      projects: projects.rows,
+      skills: skills.rows,
+      certifications: certifications.rows,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
 
 router.post("/test-config", userAuth, isEmployer, createTestConfig);
 router.post("/test-rules", userAuth, isEmployer, addTestRules);

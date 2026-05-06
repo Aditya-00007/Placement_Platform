@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function UploadCSVModal({ isOpen, onClose }) {
   const [file, setFile] = useState(null);
@@ -13,7 +14,7 @@ export default function UploadCSVModal({ isOpen, onClose }) {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("Please select a CSV file");
+      toast.error("Please select a CSV file");
       return;
     }
 
@@ -31,10 +32,10 @@ export default function UploadCSVModal({ isOpen, onClose }) {
         },
       });
 
-      alert("Upload successful ✅");
+      toast.success("Upload successful ✅");
       onClose();
     } catch (err) {
-      alert("Upload failed ❌");
+      toast.error("Upload failed ❌");
       console.error(err);
     } finally {
       setLoading(false);

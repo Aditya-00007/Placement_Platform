@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function TestConfigModal({ job, onClose }) {
   const [duration, setDuration] = useState("");
@@ -26,11 +27,11 @@ export default function TestConfigModal({ job, onClose }) {
 
   const handleSubmit = async () => {
     if (!duration || !passingScore) {
-      return alert("Fill duration & passing score");
+      return toast.error("Fill duration & passing score");
     }
     for (let rule of rules) {
       if (!rule.skill || !rule.difficulty || !rule.question_count) {
-        return alert("Fill all rule fields");
+        return toast.error("Fill all rule fields");
       }
     }
     try {
@@ -66,11 +67,11 @@ export default function TestConfigModal({ job, onClose }) {
         },
       );
 
-      alert("Test created ✅");
+      toast.success("Test created ✅");
       onClose();
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.error || "Error ❌");
+      toast.error(err.response?.data?.error || "Error ❌");
     }
   };
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
+import toast from "react-hot-toast";
 
 export default function CandidateProfile() {
 
@@ -109,7 +110,7 @@ export default function CandidateProfile() {
       const token = localStorage.getItem("token");
 
       if (!data.profile.resume_url || !data.profile.profile_summary) {
-        alert("Resume & Summary required!");
+        toast.error("Resume & Summary required!");
         return;
       }
 
@@ -128,13 +129,13 @@ export default function CandidateProfile() {
         }
       );
 
-      alert("✅ Profile Saved Successfully");
+      toast.success("Profile Saved Successfully");
       setEditMode(false);
       fetchProfile();
 
     } catch (err) {
       console.error(err);
-      alert("❌ Error saving profile");
+      toast.error("Error saving profile");
     } finally {
       setLoading(false);
     }

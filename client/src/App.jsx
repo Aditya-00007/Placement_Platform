@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import PublicLayout from "./components/PublicLayout";
 
 // Public Pages
@@ -47,7 +48,9 @@ import CandidateApplication  from "./pages/CandidateApplication";
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <Toaster position="top-right" />
+      <Routes>
       {/* public routes */}
       <Route
         element={
@@ -233,5 +236,6 @@ export default function App() {
       /> */}
 
     </Routes>
+    </>
   );
 }

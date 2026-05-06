@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const jobs = [
   {
@@ -123,11 +124,11 @@ export default function JobDetailsPage() {
     event.preventDefault();
 
     if (!resumeFile) {
-      alert('Please upload your resume before submitting.');
+      toast.error('Please upload your resume before submitting.');
       return;
     }
 
-    alert('Application submitted successfully. We will contact you soon.');
+    toast.success('Application submitted successfully. We will contact you soon.');
     setApplication({
       fullName: '',
       email: '',

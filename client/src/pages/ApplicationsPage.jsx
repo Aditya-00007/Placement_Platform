@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
+import CandidateProfileModal from "../components/modals/CandidateProfileModal";
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
 
   const [filters, setFilters] = useState({
     job: "ALL",
@@ -45,8 +47,17 @@ export default function ApplicationsPage() {
   };
 
   const updateStatus = async (id, status) => {
-    await axios.patch(`/api/employer/applications/${id}`, { status });
-    fetchApplications();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.patch(`/api/employer/applications/${id}/status`, { status }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchApplications();
+    } catch (err) {
+      console.error("Update status error:", err);
+    }
   };
 
   return (
@@ -143,22 +154,28 @@ export default function ApplicationsPage() {
                     {/* ACTIONS */}
                     <td className="p-3 flex gap-2">
                       <button
+                        onClick={() => setSelectedCandidate(app.candidate_id)}
+                        className="text-blue-500 px-2 py-1 bg-blue-100 rounded cursor-pointer"
+                      >
+                        View Profile
+                      </button>
+                      <button
                         onClick={() => updateStatus(app.id, "SHORTLISTED")}
-                        className="text-green-600"
+                        className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded cursor-pointer"
                       >
                         Shortlist
                       </button>
 
                       <button
                         onClick={() => updateStatus(app.id, "REJECTED")}
-                        className="text-red-600"
+                        className="text-red-500 px-2 py-1 bg-red-100 rounded cursor-pointer"
                       >
                         Reject
                       </button>
 
                       <button
                         onClick={() => updateStatus(app.id, "HIRED")}
-                        className="text-blue-600"
+                        className="px-2 py-1 bg-green-100 text-green-700 rounded cursor-pointer"
                       >
                         Hire
                       </button>
@@ -170,6 +187,12 @@ export default function ApplicationsPage() {
           </table>
         </div>
       </div>
+      {selectedCandidate && (
+        <CandidateProfileModal
+          candidateId={selectedCandidate}
+          onClose={() => setSelectedCandidate(null)}
+        />
+      )}
     </DashboardLayout>
   );
 }

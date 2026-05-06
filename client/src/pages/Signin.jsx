@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ResetPasswordModal from "../components/modals/ResetPasswordModal";
+import toast from "react-hot-toast";
 
 const Signin = () => {
   const [form, setForm] = useState({
@@ -31,7 +31,7 @@ const Signin = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Login successful ✅");
+        toast.success("Login successful");
 
         // SAVE TOKEN
         localStorage.setItem("token", data.token);
@@ -44,10 +44,10 @@ const Signin = () => {
           navigate("/candidate/dashboard");
         }
       } else {
-        alert(data.msg);
+        toast.error(data.msg);
       }
     } catch (err) {
-      alert("Login error");
+      toast.error("Login error");
     }
   };
   return (

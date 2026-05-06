@@ -14,9 +14,9 @@ export default function EmployerJobViewModal({ isOpen, onClose, jobId }) {
 
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`/api/admin/jobs/${jobId}`, {
+        const res = await axios.get(`/api/employer/jobs/${jobId}`, {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         });
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
 import ApplyJobModal from "../components/modals/ApplyJobModal";
 import CandidateJobViewModal from "../components/modals/CandidateJobViewModel"; // ✅ FIXED NAME
+import toast from "react-hot-toast";
 
 export default function CandidateJobs() {
   const [jobs, setJobs] = useState([]);
@@ -58,11 +59,11 @@ export default function CandidateJobs() {
         }
       );
 
-      alert("✅ Applied successfully!");
+      toast.success("Applied successfully!");
       setShowApplyModal(false);
       console.log(res.data);
     } catch (err) {
-      alert(err.response?.data?.error || "Error applying");
+      toast.error(err.response?.data?.error || "Error applying");
     }
   };
 

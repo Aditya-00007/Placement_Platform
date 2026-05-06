@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import DashboardLayout from "../components/DashboardLayout";
 import CreateJobModal from "../components/modals/CreateJobModal";
 import EditJobModal from "../components/modals/EditJobModal";
