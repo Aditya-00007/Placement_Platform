@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://placement-platform-1hni.onrender.com/api/$1"
+        }
+    ]
+}
