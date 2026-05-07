@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "../components/DashboardLayout";
 import ApplyJobModal from "../components/modals/ApplyJobModal";
-import CandidateJobViewModal from "../components/modals/CandidateJobViewModel"; // ✅ FIXED NAME
+import CandidateJobViewModal from "../components/modals/CandidateJobViewModel"; //  FIXED NAME
 import toast from "react-hot-toast";
 
 export default function CandidateJobs() {
@@ -20,7 +20,7 @@ export default function CandidateJobs() {
     fetchJobs();
   }, [filter, sort]);
 
-  // ✅ FETCH JOBS
+  //  FETCH JOBS
   const fetchJobs = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -42,7 +42,7 @@ export default function CandidateJobs() {
     setJobs([]);
   }
 };
-  // ✅ APPLY JOB
+  //  APPLY JOB
   const handleApply = async (payload) => {
     try {
       const token = localStorage.getItem("token");

@@ -181,6 +181,16 @@ router.post("/profile", userAuth, isCandidate, async (req, res) => {
       return res.status(400).json({ error: "Required fields missing" });
     }
 
+    let parsedSalary = expected_salary ? parseFloat(expected_salary) : null;
+    if (expected_salary && isNaN(parsedSalary)) {
+      return res.status(400).json({ error: "Expected salary must be a valid number (e.g., 300000)" });
+    }
+
+    let parsedExpYears = experience_years ? parseInt(experience_years) : 0;
+    if (experience_years && isNaN(parsedExpYears)) {
+      return res.status(400).json({ error: "Experience years must be a valid number" });
+    }
+
     //  START TRANSACTION
     await client.query("BEGIN");
 
@@ -224,8 +234,8 @@ router.post("/profile", userAuth, isCandidate, async (req, res) => {
         profile_photo,
         resume_url,
         profile_summary,
-        experience_years,
-        expected_salary,
+        parsedExpYears,
+        parsedSalary,
         current_location,
         preferred_location,
         current_address,

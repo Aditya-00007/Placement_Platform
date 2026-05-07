@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import dns from "node:dns";
+dns.setDefaultResultOrder("ipv4first");
 import "./config/db.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import register_loginRoutes from "./routes/register_loginRoutes.js";
