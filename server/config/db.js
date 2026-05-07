@@ -10,6 +10,7 @@ const pool = new pg.Pool({
   password: process.env.D_Password,
   database: process.env.Database,
   port: Number(process.env.D_PORT),
+  ssl: { rejectUnauthorized: false }, // Required for Supabase/Neon/external DBs
 });
 
 pool
