@@ -55,7 +55,7 @@ export default function Sidebar({ collapsed }) {
           <button
             onClick={() => {
               localStorage.clear(); // better
-              window.location.href = "/signin";
+              window.location.href = "/";
             }}
             className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:bg-red-500/20"
           >
