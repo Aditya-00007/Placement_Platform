@@ -1,206 +1,200 @@
-import React from 'react';
-import { Certificate, Clock, Users, CheckCircle, Medal, Sparkle, Target } from '@phosphor-icons/react';
+import React from "react";
+import {
+  Certificate,
+  Clock,
+  Users,
+  CheckCircle,
+  Medal,
+  Sparkle,
+  ArrowRight,
+} from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
 
 export default function CertificationPage() {
-  const highlights = [
-    { icon: Certificate, label: 'Industry-Recognized' },
-    { icon: Users, label: 'Expert Instructors' },
-    { icon: Clock, label: 'Flexible Learning' }
-  ];
-
-  const benefits = [
-    {
-      icon: Medal,
-      title: 'Recognized Credentials',
-      description: 'Certifications valued by top employers'
-    },
-    {
-      icon: Users,
-      title: 'Expert Mentors',
-      description: 'Learn from industry professionals'
-    },
-    {
-      icon: CheckCircle,
-      title: 'Practical Projects',
-      description: 'Hands-on experience with real scenarios'
-    },
-    {
-      icon: Clock,
-      title: 'Lifetime Access',
-      description: 'Revisit course materials anytime'
-    }
-  ];
-
   const certifications = [
     {
-      level: 'Beginner to Intermediate',
-      title: 'Professional Communication Certification',
-      description: 'Master the art of professional communication in workplace settings.',
-      duration: '4 weeks',
-      enrolled: '1,200 enrolled',
-      modules: ['Business Writing', 'Presentation Skills', 'Email Etiquette', 'Interview Communication']
+      level: "Intermediate",
+      title: "Full Stack Web Engineering (React & Node.js)",
+      description: "Comprehensive curriculum covering modern React architecture, REST APIs, PostgreSQL integration, and cloud deployments.",
+      duration: "10 weeks",
+      enrolled: "1,500+ candidates",
+      modules: [
+        "Modern React 19 & Component Architecture",
+        "Express & Node.js Backend Microservices",
+        "PostgreSQL Schema Design & Query Optimization",
+        "Production Deployment & CI/CD Pipelines",
+      ],
     },
     {
-      level: 'Intermediate',
-      title: 'Data Analytics Certification',
-      description: 'Learn to analyze and interpret complex datasets for business insights.',
-      duration: '8 weeks',
-      enrolled: '850 enrolled',
-      modules: ['Python for Data Analysis', 'SQL Fundamentals', 'Data Visualization', 'Statistics']
+      level: "Intermediate to Advanced",
+      title: "Relational Database Design & PostgreSQL Mastery",
+      description: "Deep dive into ACID transactions, indexing strategies, complex joins, views, and database connection pooling.",
+      duration: "6 weeks",
+      enrolled: "950+ candidates",
+      modules: [
+        "Advanced SQL Queries & Indexing",
+        "Relational Schema Normalization",
+        "Transactions, Locks & Performance Tuning",
+        "Database Administration & Production Readiness",
+      ],
     },
     {
-      level: 'Beginner',
-      title: 'Digital Marketing Certification',
-      description: 'Comprehensive digital marketing skills for the modern marketer.',
-      duration: '6 weeks',
-      enrolled: '2,100 enrolled',
-      modules: ['SEO Basics', 'Social Media Marketing', 'Content Strategy', 'Analytics & Reporting']
+      level: "Beginner to Intermediate",
+      title: "JavaScript ES6+ & Modern Web Fundamentals",
+      description: "Core programming language concepts, asynchronous promises, event loop mechanics, and modern ECMAScript standards.",
+      duration: "4 weeks",
+      enrolled: "2,200+ candidates",
+      modules: [
+        "Closures, Scope & Prototypes",
+        "Async / Await & Fetch APIs",
+        "DOM Manipulation & Event Handling",
+        "Unit Testing & Code Quality",
+      ],
     },
     {
-      level: 'Advanced',
-      title: 'Project Management Professional',
-      description: 'Advanced project management techniques aligned with industry standards.',
-      duration: '10 weeks',
-      enrolled: '650 enrolled',
-      modules: ['Agile Methodology', 'Risk Management', 'Resource Planning', 'Stakeholder Management']
+      level: "Intermediate",
+      title: "Data Analytics & Applied SQL for Business",
+      description: "Practical data analysis techniques, data visualization, business metrics modeling, and automated report generation.",
+      duration: "8 weeks",
+      enrolled: "850+ candidates",
+      modules: [
+        "SQL Aggregations & Window Functions",
+        "Data Cleaning & Transformation",
+        "Dashboard Visualization",
+        "Business KPI Reporting",
+      ],
     },
     {
-      level: 'Intermediate to Advanced',
-      title: 'Full Stack Web Development',
-      description: 'Complete web development training from frontend to backend.',
-      duration: '12 weeks',
-      enrolled: '1,500 enrolled',
-      modules: ['Frontend Technologies', 'Backend Development', 'Database Management', 'Deployment']
+      level: "Advanced",
+      title: "Campus Placement Interview Readiness",
+      description: "Technical interview preparation, data structures and algorithms, mock interviews, and resume structuring.",
+      duration: "6 weeks",
+      enrolled: "3,100+ candidates",
+      modules: [
+        "Data Structures & Algorithmic Problem Solving",
+        "System Architecture Basics",
+        "Technical & HR Mock Interviews",
+        "ATS-Optimized Resume Crafting",
+      ],
     },
     {
-      level: 'Intermediate',
-      title: 'HR Management Certification',
-      description: 'Essential HR skills for modern human resource professionals.',
-      duration: '6 weeks',
-      enrolled: '900 enrolled',
-      modules: ['Talent Acquisition', 'Performance Management', 'HR Analytics', 'Employee Relations']
-    }
+      level: "Beginner",
+      title: "Professional Workplace Communication",
+      description: "Executive presentation skills, business email writing, stakeholder management, and corporate etiquette.",
+      duration: "4 weeks",
+      enrolled: "1,200+ candidates",
+      modules: [
+        "Business Writing & Email Etiquette",
+        "Technical Presentations",
+        "Team Collaboration Dynamics",
+        "Professional Interview Speech",
+      ],
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-br from-violet-700 via-fuchsia-700 to-purple-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 sm:py-24">
-          <div className="max-w-3xl">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 mb-5">
-              <Sparkle size={16} /> Certification Programs
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-              Certification Programs
-            </h1>
-            <p className="text-base sm:text-lg text-white/90 max-w-2xl">
-              Enhance your skills and boost your career with industry-recognized certifications designed by experts.
-            </p>
+    <div className="bg-white">
+      {/* Header */}
+      <section className="bg-slate-900 text-white py-20 sm:py-24 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 text-xs font-semibold mb-4">
+            <Sparkle size={14} weight="fill" /> Verified Technical Certifications
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+            Industry-Recognized Skill Certifications
+          </h1>
+          <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto">
+            Upgrade your resume with practical, project-driven certifications designed in alignment with enterprise hiring requirements.
+          </p>
+        </div>
+      </section>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {highlights.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <span
-                    key={index}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur-sm"
-                  >
-                    <Icon size={16} />
-                    {item.label}
-                  </span>
-                );
-              })}
+      {/* Value Props */}
+      <section className="py-12 bg-slate-50/60 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <Medal size={24} className="text-blue-600 mx-auto mb-2" weight="duotone" />
+              <h3 className="text-xs font-bold text-gray-900 mb-0.5">Recruiter Recognized</h3>
+              <p className="text-[11px] text-gray-500">Valued across partner companies</p>
+            </div>
+            <div>
+              <Users size={24} className="text-blue-600 mx-auto mb-2" weight="duotone" />
+              <h3 className="text-xs font-bold text-gray-900 mb-0.5">Expert-Curated</h3>
+              <p className="text-[11px] text-gray-500">Built by senior practitioners</p>
+            </div>
+            <div>
+              <CheckCircle size={24} className="text-blue-600 mx-auto mb-2" weight="duotone" />
+              <h3 className="text-xs font-bold text-gray-900 mb-0.5">Hands-on Projects</h3>
+              <p className="text-[11px] text-gray-500">Real codebase assessments</p>
+            </div>
+            <div>
+              <Clock size={24} className="text-blue-600 mx-auto mb-2" weight="duotone" />
+              <h3 className="text-xs font-bold text-gray-900 mb-0.5">Flexible Timeline</h3>
+              <p className="text-[11px] text-gray-500">Self-paced learning modules</p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Courses Grid */}
       <section className="py-16 sm:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">
-            Why Choose Our Certifications?
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <div key={index} className="text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-violet-100 text-violet-700 mb-4">
-                    <Icon size={24} weight="bold" />
-                  </div>
-                  <h3 className="text-sm font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                  <p className="text-xs sm:text-sm text-gray-500 max-w-[14rem] mx-auto">{benefit.description}</p>
-                </div>
-              );
-            })}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mb-12">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2">
+              Curriculum Catalog
+            </h2>
+            <h3 className="text-2xl font-bold text-gray-900">
+              Available Skill Certifications
+            </h3>
           </div>
-        </div>
-      </section>
 
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">
-            Available Certifications
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {certifications.map((cert, index) => (
-              <article
+              <div
                 key={index}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl border border-gray-200/90 hover:border-blue-200 hover:shadow-xs p-6 flex flex-col justify-between transition"
               >
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <span className="rounded-full bg-violet-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-violet-700">
-                    {cert.level}
-                  </span>
-                  <span className="text-violet-700">
-                    <Certificate size={18} weight="bold" />
-                  </span>
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700">
+                      {cert.level}
+                    </span>
+                    <span className="text-[11px] text-gray-400 flex items-center gap-1">
+                      <Clock size={13} /> {cert.duration}
+                    </span>
+                  </div>
+
+                  <h4 className="text-base font-bold text-gray-900 leading-snug mb-2">
+                    {cert.title}
+                  </h4>
+                  <p className="text-xs text-gray-600 leading-relaxed mb-4">
+                    {cert.description}
+                  </p>
+
+                  <div className="mb-6 pt-4 border-t border-gray-100">
+                    <p className="text-[11px] font-bold text-gray-800 uppercase tracking-wider mb-2">
+                      Core Modules
+                    </p>
+                    <ul className="space-y-1 text-xs text-gray-600">
+                      {cert.modules.map((m, mIdx) => (
+                        <li key={mIdx} className="flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                          <span>{m}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 leading-snug mb-2">{cert.title}</h3>
-                <p className="text-sm text-gray-600 mb-4">{cert.description}</p>
-
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                  <span className="inline-flex items-center gap-1.5"><Clock size={14} /> {cert.duration}</span>
-                  <span className="inline-flex items-center gap-1.5"><Users size={14} /> {cert.enrolled}</span>
-                </div>
-
-                <div className="mb-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-700 mb-2">Key Modules</p>
-                  <ul className="space-y-1.5 text-sm text-gray-600">
-                    {cert.modules.map((module, moduleIndex) => (
-                      <li key={moduleIndex} className="flex items-start gap-2">
-                        <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
-                        <span>{module}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <button className="w-full rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition-colors">
-                  Enroll Now
-                </button>
-              </article>
+                <Link
+                  to="/signup?role=candidate"
+                  className="inline-flex items-center justify-center gap-1.5 w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 rounded-lg transition"
+                >
+                  Enroll via Candidate Portal <ArrowRight size={13} />
+                </Link>
+              </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-gradient-to-r from-violet-700 via-fuchsia-700 to-purple-800 text-white py-16">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Advance Your Career?</h2>
-          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who have transformed their careers with our certification programs.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-purple-800 hover:bg-gray-100 transition-colors">
-              Browse All Programs
-            </button>
-            <button className="rounded-md border border-white/70 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors">
-              Contact Advisor
-            </button>
           </div>
         </div>
       </section>

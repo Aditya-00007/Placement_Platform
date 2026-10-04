@@ -1,3 +1,5 @@
+import pool, { db } from "../config/db.js";
+
 export const submitTest = async (req, res) => {
   const { application_id, answers } = req.body;
 

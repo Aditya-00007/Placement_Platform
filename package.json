@@ -1,23 +1,30 @@
 {
-  "name": "y",
+  "name": "placement-platform",
   "version": "1.0.0",
-  "description": "",
+  "description": "Comprehensive Placement Platform with PostgreSQL Database",
   "license": "ISC",
   "author": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "npm run dev --prefix client",
-    "server": "nodemon server/index.js"
+    "server": "nodemon server/index.js",
+    "build": "npm run build --prefix client",
+    "db:init": "node server/scripts/initDb.js",
+    "db:seed": "node server/scripts/seedFullData.js",
+    "db:setup": "node server/scripts/initDb.js && node server/scripts/seedFullData.js"
   },
   "dependencies": {
     "axios": "^1.15.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
     "nodemailer": "^8.0.5",
     "nodemon": "^3.1.14",
     "pg": "^8.20.0"
@@ -25,7 +32,6 @@
   "devDependencies": {
     "autoprefixer": "^10.4.27",
     "concurrently": "^9.2.1",
-    "nodemon": "^3.1.14",
     "postcss": "^8.5.9",
     "tailwindcss": "^4.2.2"
   }

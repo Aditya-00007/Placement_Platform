@@ -1,3 +1,5 @@
+import pool, { db } from "../config/db.js";
+
 export const getTestQuestions = async (req, res) => {
   const { jobId } = req.params;
 

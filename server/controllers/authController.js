@@ -28,25 +28,37 @@ export const sendOTP = async (req, res) => {
     [email, otp, expires],
   );
 
-  // send email
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  // send email if configured, otherwise fallback gracefully for testing
+  try {
+    if (
+      process.env.EMAIL_USER &&
+      process.env.EMAIL_PASS &&
+      !process.env.EMAIL_USER.includes("your_email")
+    ) {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Your OTP",
-    text: `Welcome to Placement Platform ,Your OTP is ${otp}`,
-  });
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Your OTP",
+        text: `Welcome to Placement Platform, Your OTP is ${otp}`,
+      });
+    } else {
+      console.log(`[AUTH NOTICE] Email credentials not configured. OTP for ${email}: ${otp}`);
+    }
+  } catch (mailErr) {
+    console.warn(`[AUTH WARNING] Email delivery skipped (${mailErr.message}). OTP for ${email}: ${otp}`);
+  }
 
-  res.json({ msg: "OTP sent" });
+  res.json({ msg: "OTP generated successfully", dev_otp: otp });
 };
 
 // REGISTER
@@ -235,25 +247,37 @@ const sendForgotOTP = async (req, res) => {
     [email, otp, expires],
   );
 
-  // send email
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  // send email if configured, otherwise fallback gracefully
+  try {
+    if (
+      process.env.EMAIL_USER &&
+      process.env.EMAIL_PASS &&
+      !process.env.EMAIL_USER.includes("your_email")
+    ) {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Reset Password OTP",
-    text: `Your password reset OTP is ${otp}`,
-  });
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Reset Password OTP",
+        text: `Your password reset OTP is ${otp}`,
+      });
+    } else {
+      console.log(`[AUTH NOTICE] Email credentials not configured. Reset OTP for ${email}: ${otp}`);
+    }
+  } catch (mailErr) {
+    console.warn(`[AUTH WARNING] Email delivery skipped (${mailErr.message}). Reset OTP for ${email}: ${otp}`);
+  }
 
-  res.json({ msg: "OTP sent for password reset" });
+  res.json({ msg: "OTP generated for password reset", dev_otp: otp });
 };
 
 const resetPassword = async (req, res) => {

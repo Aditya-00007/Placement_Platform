@@ -41,6 +41,4 @@ CREATE TABLE application_answers (
     question_id INT,
     selected_option CHAR(1),
     is_correct BOOLEAN
-);
-
-skill,difficulty,question,option_a,option_b,option_c,option_d,correct_option
+);

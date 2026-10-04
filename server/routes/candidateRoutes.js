@@ -616,7 +616,7 @@ router.post("/apply/:jobId", userAuth, isCandidate, async (req, res) => {
 });
 
 router.get("/test/:jobId", getTestQuestions);
-router.post("test/submit", submitTest);
+router.post("/test/submit", submitTest);
 router.get("/applications", userAuth, isCandidate, async (req, res) => {
   try {
     const candResult = await pool.query(

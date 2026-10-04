@@ -1,133 +1,124 @@
-import React, { useState } from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  GraduationCap,
+  Buildings,
+  CheckCircle,
+  ArrowRight,
+  ShieldCheck,
+  Sparkle,
+} from "@phosphor-icons/react";
 
 export default function RegistrationPage() {
-  const [userType, setUserType] = useState(null);
-
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Registration</h1>
-          <p className="text-lg">Choose your registration type to get started</p>
+    <div className="bg-slate-50/50 min-h-screen py-16 sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-3">
+            <Sparkle size={14} weight="fill" /> Join PlacementPlatform
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-3">
+            Choose Your Registration Portal
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600">
+            Select your account type below to get started with verified campus placements or enterprise candidate discovery.
+          </p>
         </div>
-      </section>
 
-      {/* Registration Options */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {!userType ? (
-            <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-              {/* Employer Zone */}
-              <div className="bg-white p-12 rounded-lg shadow-lg text-center hover:shadow-xl transition">
-                <div className="text-5xl font-bold text-blue-600 mb-4">👔</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Employer Zone</h2>
-                <p className="text-gray-600 mb-8">
-                  Post job openings, find top talent, and build your team
-                </p>
-                <button
-                  onClick={() => setUserType('employer')}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
-                >
-                  Register as Employer
-                </button>
+        {/* Portals Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+          {/* Candidate Card */}
+          <div className="bg-white rounded-2xl border border-gray-200/90 hover:border-blue-300 hover:shadow-xs p-8 flex flex-col justify-between transition">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
+                <GraduationCap size={28} weight="duotone" />
               </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Candidate / Student Portal
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 mb-6 leading-relaxed">
+                For undergraduate, graduate, and alumni job seekers looking for internships and full-time campus and lateral placements.
+              </p>
 
-              {/* Candidates Zone */}
-              <div className="bg-white p-12 rounded-lg shadow-lg text-center hover:shadow-xl transition">
-                <div className="text-5xl font-bold text-purple-600 mb-4">🎯</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Candidates Zone</h2>
-                <p className="text-gray-600 mb-8">
-                  Find your dream job and advance your career
-                </p>
-                <button
-                  onClick={() => setUserType('candidate')}
-                  className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition font-semibold"
-                >
-                  Register as Candidate
-                </button>
+              <div className="space-y-2.5 text-xs text-gray-700 mb-8">
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Build structured academic and technical profile</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Automated eligibility and branch matching scores</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Take timed skill assessments with instant grading</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Real-time status tracking for all applications</span>
+                </div>
               </div>
             </div>
-          ) : (
-            <div className="max-w-2xl mx-auto">
-              <button
-                onClick={() => setUserType(null)}
-                className="mb-8 text-blue-600 hover:text-blue-700 font-semibold"
-              >
-                ← Back to Registration Type
-              </button>
 
-              <div className="bg-white p-12 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  {userType === 'employer' ? 'Employer Registration' : 'Candidate Registration'}
-                </h2>
+            <Link
+              to="/signup?role=candidate"
+              className="inline-flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-3 rounded-lg shadow-xs transition"
+            >
+              Register as Candidate <ArrowRight size={14} weight="bold" />
+            </Link>
+          </div>
 
-                <form className="space-y-6">
-                  {userType === 'employer' ? (
-                    <>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Company Name</label>
-                        <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Industry</label>
-                        <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Company Size</label>
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600">
-                          <option>Select company size</option>
-                          <option>Startup (1-50)</option>
-                          <option>Small (51-500)</option>
-                          <option>Medium (501-5000)</option>
-                          <option>Large (5000+)</option>
-                        </select>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
-                        <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Current Role</label>
-                        <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Experience Level</label>
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600">
-                          <option>Select experience level</option>
-                          <option>Fresher (0-1 years)</option>
-                          <option>Junior (1-3 years)</option>
-                          <option>Mid-level (3-7 years)</option>
-                          <option>Senior (7+ years)</option>
-                        </select>
-                      </div>
-                    </>
-                  )}
+          {/* Employer Card */}
+          <div className="bg-white rounded-2xl border border-gray-200/90 hover:border-slate-400 hover:shadow-xs p-8 flex flex-col justify-between transition">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-6">
+                <Buildings size={28} weight="duotone" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Corporate / Recruiter Portal
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 mb-6 leading-relaxed">
+                For corporate talent acquisition teams, HR leaders, and campus recruiters seeking pre-assessed, verified candidates.
+              </p>
 
-                  <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                    <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Password</label>
-                    <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600" />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
-                  >
-                    Complete Registration
-                  </button>
-                </form>
+              <div className="space-y-2.5 text-xs text-gray-700 mb-8">
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Post jobs with customized eligibility criteria</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Define assessment rules (skills & difficulty counts)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Applicant tracking pipeline (Shortlist, Hire, Reject)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                  <span>Company profile verification and recruiter dashboard</span>
+                </div>
               </div>
             </div>
-          )}
+
+            <Link
+              to="/signup?role=employer"
+              className="inline-flex items-center justify-center gap-2 w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-3 rounded-lg shadow-xs transition"
+            >
+              Register as Employer <ArrowRight size={14} weight="bold" />
+            </Link>
+          </div>
         </div>
-      </section>
+
+        {/* Existing user prompt */}
+        <div className="text-center text-xs text-gray-500">
+          Already have an account?{" "}
+          <Link to="/signin" className="text-blue-600 font-semibold hover:underline">
+            Sign In to your Dashboard
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
